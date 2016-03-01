@@ -50,6 +50,12 @@
 #include "sd_socket.h"
 #endif
 
+//NEW INCLUDES
+#include "setting_manager.h"
+#include <sys/time.h>
+
+const char* SETTING_FNAME = "SETTINGS.txt"
+
 /*
  * The name of a tty device from which to pick up whatever the local
  * owning group for tty devices is.  Used when we drop privileges.
@@ -164,7 +170,7 @@ static void onsig(int sig)
     signalled = (sig_atomic_t) sig;
 }
 
-static void typelist(void)
+stati void typelist(void)
 /* list installed drivers and enabled features */
 {
     const struct gps_type_t **dp;
@@ -494,8 +500,10 @@ struct subscriber_t
 {
     int fd;			/* client file descriptor. -1 if unused */
     time_t active;		/* when subscriber last polled for data */
-    struct policy_t policy;	/* configurable bits */
     pthread_mutex_t mutex;	/* serialize access to fd */
+   
+    bool enabled; 
+    unsigned int app_id;
 };
 
 #define subscribed(sub, devp)    (sub->policy.watcher && (sub->policy.devpath[0]=='\0' || strcmp(sub->policy.devpath, devp->gpsdata.dev.path)==0))
@@ -1055,7 +1063,7 @@ static void json_devicelist_dump(char *reply, size_t replylen)
 			     reply + strlen(reply), replylen - strlen(reply));
 	    cp = reply + strlen(reply);
 	    *--cp = '\0';
-	    *--cp = '\0';
+	    *--c/p = '\0';
 	    (void)strlcat(reply, ",", replylen);
 	}
 
@@ -1063,6 +1071,12 @@ static void json_devicelist_dump(char *reply, size_t replylen)
     (void)strlcat(reply, "]}\r\n", replylen);
 }
 #endif /* SOCKET_EXPORT_ENABLE */
+
+static void json_id_dump(char* reply, size_t replylen){
+    strlcpy(reply, "{\"is_activated\": true }", replylen);
+}
+
+
 
 static void rstrip(char *str)
 /* strip trailing \r\n\t\SP from a string */
@@ -1084,6 +1098,29 @@ static void handle_request(struct subscriber_t *sub,
 
     if (buf[0] == '?')
 	++buf;
+    
+    //handling id pass
+    if (str_starts_with(buf, "APP_ID")
+            && (buf[6] == ';' || buf[6] == '=')){
+        const char* start = buf;
+        buf += 6;
+        if (*buf == ';'){
+            ++buf;
+        }
+        else{
+            int status = json_id_read(buf,sub ,NULL);
+            //dumping error message for invalid id
+            if (status != 0) {
+                (void)snprintf(reply, replylen,
+                        "{\"class\":\"ERROR\",\"message\":\"Invalid APP_ID: %s\"}\r\n",
+                        json_error_string(status));
+                gpsd_log(&context.errout, LOG_ERROR, "response: %s\n", reply);
+
+            }
+            else
+                json_id_dump(reply, replylen);
+        }
+
     if (str_starts_with(buf, "DEVICES;")) {
 	buf += 8;
 	json_devicelist_dump(reply, replylen);
@@ -1280,7 +1317,7 @@ static void handle_request(struct subscriber_t *sub,
 	char tbuf[JSON_DATE_MAX+1];
 	int active = 0;
 	buf += 5;
-	for (devp = devices; devp < devices + MAX_DEVICES; devp++)
+	for (devp = devices; devp < devices + MAX_DEVICES; d/gsevp++)
 	    if (allocated_device(devp) && subscribed(sub, devp))
 		if ((devp->observed & GPS_TYPEMASK) != 0)
 		    active++;
@@ -1290,9 +1327,11 @@ static void handle_request(struct subscriber_t *sub,
 	for (devp = devices; devp < devices + MAX_DEVICES; devp++) {
 	    if (allocated_device(devp) && subscribed(sub, devp)) {
 		if ((devp->observed & GPS_TYPEMASK) != 0) {
-		    json_tpv_dump(devp, &sub->policy,
-				  reply + strlen(reply),
-				  replylen - strlen(reply));
+		    //TODO TPV DUMP RIGHT HERE
+            if (sub->enabled == 1 && subscriber_check_epoch(sub) == 1)
+                json_tpv_private_dump(devp, &sub->policy,
+				    reply + strlen(reply),
+				    replylen - strlen(reply));
 		    rstrip(reply);
 		    (void)strlcat(reply, ",", replylen);
 		}
@@ -1444,7 +1483,10 @@ static void all_reports(struct gps_device_t *device, gps_mask_t changed)
 	     sub < subscribers + MAX_CLIENTS; sub++)
 	    if (sub->active != 0
 		&& sub->policy.watcher
-		&& subscribed(sub, device))
+		&& subscribed(sub, device)
+        && sub->enabled
+        && subscriber_check_epoch(sub) 
+        )
 		listeners = true;
 	if (listeners) {
 	    (void)awaken(device);
@@ -1591,11 +1633,15 @@ static void all_reports(struct gps_device_t *device, gps_mask_t changed)
 	shm_update(&context, &device->gpsdata);
 #endif /* SHM_EXPORT_ENABLE */
 
+//TODO ADD AN EPOCH SETTING REPORTS
 #ifdef SOCKET_EXPORT_ENABLE
     /* update all subscribers associated with this device */
     for (sub = subscribers; sub < subscribers + MAX_CLIENTS; sub++) {
 	if (sub == NULL || sub->active == 0 || !subscribed(sub, device))
 	    continue;
+    //do not allow non enabled or time not passed
+    if (sub->enabled == 0 || subscriber_check_epoch(sub) == 0)
+        continue;
 
 #ifdef PASSTHROUGH_ENABLE
 	/* this is for passing through JSON packets */
@@ -1656,7 +1702,7 @@ static void all_reports(struct gps_device_t *device, gps_mask_t changed)
 static int handle_gpsd_request(struct subscriber_t *sub, const char *buf)
 /* execute GPSD requests from a buffer */
 {
-    char reply[GPS_JSON_RESPONSE_MAX + 1];
+    char eply[GPS_JSON_RESPONSE_MAX + 1];
 
     reply[0] = '\0';
     if (buf[0] == '?') {
@@ -1803,6 +1849,10 @@ static void gpsd_terminate(struct gps_context_t *context CONDITIONALLY_UNUSED)
 
 int main(int argc, char *argv[])
 {
+    //SETTING MANAGER INSTANCE
+    setting_manager_t settings;
+    setting_manager_new(&settings,  SETTING_FNAME);
+
     /* some of these statics suppress -W warnings due to longjmp() */
 #ifdef SOCKET_EXPORT_ENABLE
     static char *gpsd_service = NULL;
@@ -2184,7 +2234,8 @@ int main(int argc, char *argv[])
 	/* always be open to new client connections */
 	for (i = 0; i < AFCOUNT; i++) {
 	    if (msocks[i] >= 0 && FD_ISSET(msocks[i], &rfds)) {
-		socklen_t alen = (socklen_t) sizeof(fsin);
+		//there is a socket with a client to be set up    
+        socklen_t alen = (socklen_t) sizeof(fsin);
 		socket_t ssock =
 		    accept(msocks[i], (struct sockaddr *)&fsin, &alen);
 
@@ -2201,7 +2252,7 @@ int main(int argc, char *argv[])
 			(void)fcntl(ssock, F_SETFL, opts | O_NONBLOCK);
 
 		    c_ip = netlib_sock2ip(ssock);
-		    client = allocate_client();
+		    client = allocate_client();//just gives you a slot in the array
 		    if (client == NULL) {
 			gpsd_log(&context.errout, LOG_ERROR,
 				 "Client %s connect on fd %d -"
@@ -2209,6 +2260,7 @@ int main(int argc, char *argv[])
 				    ssock);
 			(void)close(ssock);
 		    } else
+            //setting a socket up(?)
 			if (setsockopt
 			    (ssock, SOL_SOCKET, SO_LINGER, (char *)&linger,
 			     (int)sizeof(struct linger)) == -1) {
@@ -2216,12 +2268,20 @@ int main(int argc, char *argv[])
 				 "Error: SETSOCKOPT SO_LINGER\n");
 			(void)close(ssock);
 		    } else {
+            //buffer for writing to port
 			char announce[GPS_JSON_RESPONSE_MAX];
 			FD_SET(ssock, &all_fds);
 			adjust_max_fd(ssock, true);
 			client->fd = ssock;
 			client->active = time(NULL);
-			gpsd_log(&context.errout, LOG_SPIN,
+			client->enabled = 0;//need to pass in a command before enabled
+            gettimeofday(&client->policy->last_update_time); 
+            //TODO set up client's app_id and use setting manager
+            //to get app gps privact setting
+            //initialize it with teh subsriber_t modified
+            
+            
+            gpsd_log(&context.errout, LOG_SPIN,
 				 "client %s (%d) connect on fd %d\n", c_ip,
 				 sub_index(client), ssock);
 			json_version_dump(announce, sizeof(announce));
@@ -2232,6 +2292,24 @@ int main(int argc, char *argv[])
 		FD_CLR(msocks[i], &rfds);
 	    }
 	}
+#endif /* SOCKET_EXPORT_ENABLE */
+
+
+#ifdef SOCKET_EXPORT_ENABLE
+    //UPDATE privacy settings from setting manager
+    //TODO remove duplicate app_id's
+    for (int i = 0; i < MAX_CLIENTS; i++){
+        if (subscribers[i].enabled){
+            app_entry_t app;
+            if (setting_manager_get_app_entry(&settings,subscribers[i].app_id ,&app))
+                gps_priv_copy(&app.gps_settings, 
+                        &subscribers[i].policy.gps_priv_settings);
+            //default settings
+            else
+                gps_priv_copy(&DEFAULT_GPS_PRIV_SETTINGS
+                        , &subscribers[i].policy.gps_priv_settings);
+        }
+    }
 #endif /* SOCKET_EXPORT_ENABLE */
 
 #ifdef CONTROL_SOCKET_ENABLE
@@ -2277,6 +2355,10 @@ int main(int argc, char *argv[])
 #endif /* CONTROL_SOCKET_ENABLE */
 
 	/* poll all active devices */
+
+    //in this loop, for all devices, it will find watchers and update the gps
+    //data respectively calling all_reports
+    //TODO modify all_reports to only report to watchers
 	for (device = devices; device < devices + MAX_DEVICES; device++)
 	    if (allocated_device(device) && device->gpsdata.gps_fd > 0)
 		switch (gpsd_multipoll(FD_ISSET(device->gpsdata.gps_fd, &rfds),
@@ -2314,13 +2396,14 @@ int main(int argc, char *argv[])
 
 #ifdef SOCKET_EXPORT_ENABLE
 	/* accept and execute commands for all clients */
+    //NOTE: handling subsribers and their respective command now
 	for (sub = subscribers; sub < subscribers + MAX_CLIENTS; sub++) {
 	    if (sub->active == 0)
 		continue;
 
 	    lock_subscriber(sub);
 	    if (FD_ISSET(sub->fd, &rfds)) {
-		char buf[BUFSIZ];
+		char buf[BUFSIZ];/
 		int buflen;
 
 		unlock_subscriber(sub);
@@ -2341,7 +2424,7 @@ int main(int argc, char *argv[])
 		    /*
 		     * When a command comes in, update subscriber.active to
 		     * timestamp() so we don't close the connection
-		     * after COMMAND_TIMEOUT seconds. This makes
+		e    * after COMMAND_TIMEOUT seconds. This makes
 		     * COMMAND_TIMEOUT useful.
 		     */
 		    sub->active = time(NULL);
@@ -2481,5 +2564,10 @@ shutdown:
     if (pid_file)
 	(void)unlink(pid_file);
     return 0;
+}
+subscriber_check_epoch(struct subscriber_t s){
+    int epoch = s->policy->gps_priv_settings.epoch;
+    timeval_t last_update = s->policy->last_update_time;
+    return gps_epoch_allow_update(epoch, last_update);
 }
 

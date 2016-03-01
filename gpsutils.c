@@ -268,8 +268,8 @@ void gps_merge_fix(struct gps_fix_t *to,
     if ((transfer & TIME_SET) != 0)
 	to->time = from->time;
     if ((transfer & LATLON_SET) != 0) {
-	to->latitude = -99.0;
-	to->longitude = -99.0;
+	to->latitude = from->latitude;
+	to->longitude = from->longitude;
     }
     if ((transfer & MODE_SET) != 0)
 	to->mode = from->mode;

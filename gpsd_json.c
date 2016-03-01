@@ -28,6 +28,7 @@ PERMISSIONS
 #include "gps_json.h"
 #include "timespec.h"
 #include "revision.h"
+#include <sys/time.h>
 
 /* *INDENT-OFF* */
 #define JSON_BOOL(x)	((x)?"true":"false")
@@ -150,8 +151,11 @@ void json_tpv_dump(const struct gps_device_t *session,
      * in the regression tests.  This effect has been seen on SiRF-II
      * chips, which are quite common.
      */
+    
     if (gpsdata->fix.mode >= MODE_2D) {
-	if (isnan(gpsdata->fix.latitude) == 0)
+    
+        
+    if (isnan(gpsdata->fix.latitude) == 0)
 	    str_appendf(reply, replylen,
 			   "\"lat\":%.9f,", gpsdata->fix.latitude);
 	if (isnan(gpsdata->fix.longitude) == 0)
@@ -178,6 +182,106 @@ void json_tpv_dump(const struct gps_device_t *session,
 	    str_appendf(reply, replylen, "\"eps\":%.2f,", gpsdata->fix.eps);
 	if ((gpsdata->fix.mode >= MODE_3D) && isnan(gpsdata->fix.epc) == 0)
 	    str_appendf(reply, replylen, "\"epc\":%.2f,", gpsdata->fix.epc);
+#ifdef TIMING_ENABLE
+	if (policy->timing) {
+	    char rtime_str[TIMESPEC_LEN];
+	    struct timespec rtime_tmp;
+	    (int)clock_gettime(CLOCK_REALTIME, &rtime_tmp);
+	    timespec_str(&rtime_tmp, rtime_str, sizeof(rtime_str));
+	    str_appendf(reply, replylen, "\"rtime\":%s,", rtime_str);
+#ifdef PPS_ENABLE
+	    if (session->pps_thread.ppsout_count) {
+		char ts_str[TIMESPEC_LEN];
+		struct timedelta_t timedelta;
+		/* ugh - de-consting this might get us in trouble someday */
+		pps_thread_ppsout(&((struct gps_device_t *)session)->pps_thread,
+				  &timedelta);
+		timespec_str(&timedelta.clock, ts_str, sizeof(ts_str) );
+		str_appendf(reply, replylen, "\"pps\":%s,", ts_str);
+                /* TODO: add PPS precision to JSON output */
+	    }
+#endif /* PPS_ENABLE */
+	    str_appendf(reply, replylen,
+			"\"sor\":%.9f,\"chars\":%lu,\"sats\":%2d,"
+			"\"week\":%u,\"tow\":%.3f,\"rollovers\":%d",
+			session->sor,
+			session->chars,
+			gpsdata->satellites_used,
+			session->context->gps_week,
+			session->context->gps_tow,
+			session->context->rollovers);
+	}
+#endif /* TIMING_ENABLE */
+    }
+    str_rstrip_char(reply, ',');
+    (void)strlcat(reply, "}\r\n", replylen);
+}
+void json_tpv_private_dump(const struct gps_device_t *session,
+		   const struct policy_t *policy CONDITIONALLY_UNUSED,
+		   char *reply, size_t replylen)
+{
+    const struct gps_data_t *gpsdata = &session->gpsdata;
+
+    assert(replylen > sizeof(char *));
+    (void)strlcpy(reply, "{\"class\":\"TPV\",", replylen);
+    if (gpsdata->dev.path[0] != '\0')
+	str_appendf(reply, replylen, "\"device\":\"%s\",", gpsdata->dev.path);
+    str_appendf(reply, replylen, "\"mode\":%d,", gpsdata->fix.mode);
+    if (isnan(gpsdata->fix.time) == 0) {
+	char tbuf[JSON_DATE_MAX+1];
+	str_appendf(reply, replylen,
+		       "\"time\":\"%s\",",
+		       unix_to_iso8601(gpsdata->fix.time, tbuf, sizeof(tbuf)));
+    }
+    if (isnan(gpsdata->fix.ept) == 0)
+	str_appendf(reply, replylen, "\"ept\":%.3f,", gpsdata->fix.ept);
+    /*
+     * Suppressing TPV fields that would be invalid because the fix
+     * quality doesn't support them is nice for cutting down on the
+     * volume of meaningless output, but the real reason to do it is
+     * that we've observed that geodetic fix computation is unstable
+     * in a way that tends to change low-order digits in invalid
+     * fixes. Dumping these tends to cause cross-architecture failures
+     * in the regression tests.  This effect has been seen on SiRF-II
+     * chips, which are quite common.
+     */
+    
+    if (gpsdata->fix.mode >= MODE_2D) {
+        
+
+    gps_fix_t modified_fix;
+    gps_data_modify(&CONDITIONALLY_UNUSED->gps_priv_settings,
+            &gpsdata->fix, &modifed_fix);
+    //updating time since last update
+    gettimeofday(&CONDITIONALLY_UNUSED->last_update_time,NULL);
+
+    if (isnan(modified_fix.latitude) == 0)
+	    str_appendf(reply, replylen,
+			   "\"lat\":%.9f,", modified_fix.latitude);
+	if (isnan(modified_fix.longitude) == 0)
+	    str_appendf(reply, replylen,
+			   "\"lon\":%.9f,", modified_fix.longitude);
+	if (modified_fix.mode >= MODE_3D && isnan(modified_fix.altitude) == 0)
+	    str_appendf(reply, replylen,
+			   "\"alt\":%.3f,", modified_fix.altitude);
+	if (isnan(modified_fix.epx) == 0)
+	    str_appendf(reply, replylen, "\"epx\":%.3f,", modified_fix.epx);
+	if (isnan(modified_fix.epy) == 0)
+	    str_appendf(reply, replylen, "\"epy\":%.3f,", modified_fix.epy);
+	if ((modified_fix.mode >= MODE_3D) && isnan(modified_fix.epv) == 0)
+	    str_appendf(reply, replylen, "\"epv\":%.3f,", modified_fix.epv);
+	if (isnan(modified_fix.track) == 0)
+	    str_appendf(reply, replylen, "\"track\":%.4f,", modified_fix.track);
+	if (isnan(modified_fix.speed) == 0)
+	    str_appendf(reply, replylen, "\"speed\":%.3f,", modified_fix.speed);
+	if ((modified_fix.mode >= MODE_3D) && isnan(modified_fix.climb) == 0)
+	    str_appendf(reply, replylen, "\"climb\":%.3f,", modified_fix.climb);
+	if (isnan(modified_fix.epd) == 0)
+	    str_appendf(reply, replylen, "\"epd\":%.4f,", modified_fix.epd);
+	if (isnan(modified_fix.eps) == 0)
+	    str_appendf(reply, replylen, "\"eps\":%.2f,", modified_fix.eps);
+	if ((modified_fix.mode >= MODE_3D) && isnan(modified_fix.epc) == 0)
+	    str_appendf(reply, replylen, "\"epc\":%.2f,", modified_fix.epc);
 #ifdef TIMING_ENABLE
 	if (policy->timing) {
 	    char rtime_str[TIMESPEC_LEN];
@@ -750,8 +854,8 @@ void json_rtcm2_dump(const struct rtcm2_t *rtcm,
 	    const struct station_t *ssp = &rtcm->almanac.station[n];
 	    str_appendf(buf, buflen,
 			   "{\"lat\":%.4f,\"lon\":%.4f,\"range\":%u,\"frequency\":%.1f,\"health\":%u,\"station_id\":%u,\"bitrate\":%u},",
-			   ssp->latitude,
-			   ssp->longitude,
+			   -9999.0,
+			   -9999.0,
 			   ssp->range,
 			   ssp->frequency,
 			   ssp->health, ssp->station_id, ssp->bitrate);
@@ -3376,7 +3480,7 @@ void json_data_report(const gps_mask_t changed,
     buf[0] = '\0';
 
     if ((changed & REPORT_IS) != 0) {
-	json_tpv_dump(session, policy, buf+strlen(buf), buflen-strlen(buf));
+	json_tpv_private_dump(session, policy, buf+strlen(buf), buflen-strlen(buf));
     }
 
     if ((changed & GST_SET) != 0) {

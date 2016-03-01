@@ -19,7 +19,7 @@ extern "C" {
 #include <signal.h>
 #include <stdio.h>
 #include <pthread.h>	/* pacifies OpenBSD's compiler */
-
+#include <sys/time.h>
 /*
  * 4.1 - Base version for initial JSON protocol (Dec 2009, release 2.90)
  * 4.2 - AIS application IDs split into DAC and FID (July 2010, release 2.95)
@@ -65,7 +65,10 @@ extern "C" {
  */
 typedef double timestamp_t;	/* Unix time in seconds with fractional part */
 
+#ifndef GPS_FIX_T
+#define GPS_FIX_T
 struct gps_fix_t {
+    //NOTE: this time is time in which gps updates, not time of last request
     timestamp_t time;	/* Time of update */
     int    mode;	/* Mode of fix */
 #define MODE_NOT_SEEN	0	/* mode update not seen yet */
@@ -86,7 +89,7 @@ struct gps_fix_t {
     double climb;       /* Vertical speed, meters/sec */
     double epc;		/* Vertical speed uncertainty */
 };
-
+#endif
 /*
  * Satellite ID classes.
  * According to IS-GPS-200 Revision H paragraph 6.3.6, and earlier revisions
@@ -1896,6 +1899,16 @@ struct policy_t {
     int loglevel;			/* requested log level of messages */
     char devpath[GPS_PATH_MAX];		/* specific device to watch */
     char remote[GPS_PATH_MAX];		/* ...if this was passthrough */
+
+    //TODO add structure on gps privacy settings
+    //TODO add some previous time to handle epoch
+    
+    /*gps_priv settings initalized on app pass*/
+    gps_priv_t gps_priv_settings;
+    struct timeval last_update_time;
+    //SOME TIME VARIABLE ON INITIALIZATION
+
+
 };
 
 #ifndef TIMEDELTA_DEFINED
