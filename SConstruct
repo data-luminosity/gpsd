@@ -968,7 +968,7 @@ gpsdflags = usbflags + bluezflags + gpsflags
 
 # Source groups
 
-gpsd_sources = ['gpsd.c','timehint.c', 'shmexport.c','dbusexport.c','setting_manager.c', 'app_entry.c']
+gpsd_sources = ['gpsd.c','timehint.c', 'shmexport.c','dbusexport.c']
 
 if env['systemd']:
     gpsd_sources.append("sd_socket.c")
