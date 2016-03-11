@@ -505,6 +505,12 @@ struct subscriber_t
     unsigned int app_id;
 };
 
+int subscriber_check_epoch(struct subscriber_t* s){
+    int epoch = s->policy.gps_priv_settings.epoch;
+    timeval_t last_update = s->policy.last_update_time;
+    return gps_epoch_allow_update(epoch, &last_update);
+}
+
 #define subscribed(sub, devp)    (sub->policy.watcher && (sub->policy.devpath[0]=='\0' || strcmp(sub->policy.devpath, devp->gpsdata.dev.path)==0))
 
 static struct subscriber_t subscribers[MAX_CLIENTS];	/* indexed by client file descriptor */
@@ -1088,7 +1094,6 @@ static void rstrip(char *str)
     }
 }
 
-subscriber_check_epoch(struct subscriber_t s);
 
 static void handle_request(struct subscriber_t *sub,
 			   const char *buf, const char **after,
@@ -1705,7 +1710,7 @@ static void all_reports(struct gps_device_t *device, gps_mask_t changed)
 static int handle_gpsd_request(struct subscriber_t *sub, const char *buf)
 /* execute GPSD requests from a buffer */
 {
-    char eply[GPS_JSON_RESPONSE_MAX + 1];
+    char reply[GPS_JSON_RESPONSE_MAX + 1];
 
     reply[0] = '\0';
     if (buf[0] == '?') {
@@ -2571,9 +2576,4 @@ shutdown:
     return 0;
 }
 
-subscriber_check_epoch(struct subscriber_t s){
-    int epoch = s->policy->gps_priv_settings.epoch;
-    timeval_t last_update = s->policy->last_update_time;
-    return gps_epoch_allow_update(epoch, last_update);
-}
 
