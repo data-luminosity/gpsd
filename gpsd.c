@@ -1858,7 +1858,7 @@ static void gpsd_terminate(struct gps_context_t *context CONDITIONALLY_UNUSED)
 int main(int argc, char *argv[])
 {
 
-    const char* SETTING_FNAME = "SETTINGS.txt";
+    char* SETTING_FNAME = "SETTINGS.txt";
     //SETTING MANAGER INSTANCE
     setting_manager_t settings;
     setting_manager_new(&settings,  SETTING_FNAME);

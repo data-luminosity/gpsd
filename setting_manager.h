@@ -13,11 +13,11 @@ typedef struct setting_manager{
     //TODO possibly a bitmap
 } setting_manager_t;
 
-setting_manager_t* setting_manager_new(setting_manager_t*, char* const);
+setting_manager_t* setting_manager_new(setting_manager_t*, char*);
 //bool setting_manager_delete(setting_manager_t*);
 
-bool setting_manager_load_gps(setting_manager_t*, char* const);
-bool setting_manager_save_gps(setting_manager_t*, char* const);
+bool setting_manager_load_gps(setting_manager_t*, char*);
+bool setting_manager_save_gps(setting_manager_t*, char*);
 
 bool read_next_app_gps(FILE* file ,app_entry_t* dest);
 bool save_next_app_gps(FILE* file, app_entry_t* src);
