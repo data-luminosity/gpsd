@@ -66,3 +66,8 @@ bool app_entry_equals(app_entry_t* a , app_entry_t*b){
     return (a->app_id == b->app_id);
 }
 
+app_entry_t* app_entry_copy(app_entry_t* src, app_entry_t* dest){
+    dest->app_id = src->app_id;
+    gps_priv_copy(&src->gps_setting, &dest->gps_setting);
+    
+}
