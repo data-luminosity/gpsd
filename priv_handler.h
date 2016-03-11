@@ -11,7 +11,7 @@ typedef struct timeval timeval_t;
 
 //https://www.mpp.mpg.de/~huber/util/timevaldiff.c
 //returns difference in time in milliseconds
-int timediffval(timeval_t* start, timeval_t* end);
+long timediffval(timeval_t* start, timeval_t* end);
 
 
 #define EPS_GRID_TYPE 0
@@ -23,7 +23,7 @@ struct gps_fix_t* gps_data_modify(gps_priv_t*,
         struct gps_fix_t* src, struct gps_fix_t* dest);
 
 //it would be in handle request before
-bool gps_epoch_allow_update(int epoch, timeval_t* prev);
+bool gps_epoch_allow_update(long epoch, timeval_t* prev);
 struct gps_fix_t* gps_epsilon_modifyGRID(int eps, 
         struct gps_fix_t* src, struct gps_fix_t* dest);
 struct gps_fix_t* gps_epsilon_modifyRAD(int eps,

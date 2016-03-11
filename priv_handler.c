@@ -1,8 +1,23 @@
 #include "priv_handler.h"
 #include <stdlib.h>
 #include <math.h>
-int timediffval(timeval_t* start, timeval_t* end);
+#include <string.h>
+#include "gps.h"
 
+long timediffval(timeval_t* start, timeval_t* end){
+    long end_ms = end->tv_sec*1000 + end->tv_usec/1000;
+    long start_ms = start->tv_sec*1000 + start->tv_usec/1000;
+    return end_ms - start_ms;
+
+
+
+}
+
+bool gps_epoch_allow_update(long epoch, timeval_t* prev){
+    timeval_t curr_time;
+    gettimeofday(&curr_time, NULL);
+    return timediffval(prev, &curr_time) > epoch;
+}
 
 #define RADIUS_TYPE 0
 
@@ -12,7 +27,7 @@ int timediffval(timeval_t* start, timeval_t* end);
 struct gps_fix_t* gps_data_modify(gps_priv_t* settings, 
         struct gps_fix_t* src, struct gps_fix_t* dest){
     //TODO error checking
-    memcpy(dest,src, sizeof(gps_fix_t));
+    memcpy(dest,src, sizeof(struct gps_fix_t));
     
     switch (settings->type){
         case (RADIUS_TYPE):

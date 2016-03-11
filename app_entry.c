@@ -4,7 +4,7 @@
 
 
 //GPS_PRIV
-gps_priv_t* gps_priv_new(gps_priv_t* gps, int t, int epo, int eps){
+gps_priv_t* gps_priv_new(gps_priv_t* gps, int t, long epo, int eps){
     if (gps == NULL)
         return NULL;
     gps->type = t;

@@ -15,12 +15,12 @@
  */
 typedef struct gps_priv{
     int type;
-    int epoch;
+    long epoch;
     int epsilon;
 } gps_priv_t;
 
 
-gps_priv_t* gps_priv_new(gps_priv_t*, int t, int epo, int eps);
+gps_priv_t* gps_priv_new(gps_priv_t*, int t, long epo, int eps);
 gps_priv_t* gps_priv_newDefault(gps_priv_t*);
 gps_priv_t* gps_priv_copy(gps_priv_t* src, gps_priv_t* dest);
 

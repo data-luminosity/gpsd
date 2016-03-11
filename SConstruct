@@ -851,6 +851,11 @@ if env['libgpsmm']:
     libgps_sources.append("libgpsmm.cpp")
 
 libgpsd_sources = [
+    "app_entry.c",
+    "priv_handler.c",
+    "setting_manager.c"
+    
+    
     "bsd_base64.c",
     "crc24q.c",
     "gpsd_json.c",
