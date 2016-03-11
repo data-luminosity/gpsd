@@ -1,11 +1,11 @@
-#include "setting_manager.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "setting_manager.h"
 
 
 
 
-setting_manager_t* setting_manager_new(setting_manager_t* sm, char* fname const){
+setting_manager_t* setting_manager_new(setting_manager_t* sm, char* fname ) {
     if (sm == NULL)
         return NULL;
     
@@ -41,7 +41,7 @@ bool save_next_app_gps(FILE* file, app_entry_t* src){
 }
 
 //TODO do some error checking
-bool setting_manager_load_gps(setting_manager_t* sm, char* fname const){
+bool setting_manager_load_gps(setting_manager_t* sm, char* fname ){
     FILE* gpsfile = fopen(fname, "r");
     //read in count
     int num_apps;
@@ -64,7 +64,7 @@ bool setting_manager_load_gps(setting_manager_t* sm, char* fname const){
 
 
 
-bool setting_manager_save_gps(setting_manager_t* sm, char* fname const){
+bool setting_manager_save_gps(setting_manager_t* sm, char* fname ){
     FILE* gpsfile = fopen(fname, "w");
     if (fwrite(&sm->n_apps, sizeof(int), 1, gpsfile) != 1)
         return 0; 
