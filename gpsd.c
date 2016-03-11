@@ -1858,6 +1858,15 @@ static void gpsd_terminate(struct gps_context_t *context CONDITIONALLY_UNUSED)
 int main(int argc, char *argv[])
 {
 
+
+    const gps_priv_t DEFAULT_GPS_PRIV_SETTINGS = {
+        .type = GPS_TYPE_DEFAULT,
+        .epoch = GPS_EPOCH_DEFAULT,
+        .epsilon = GPS_EPSILON_DEFAULT
+    };
+
+
+
     char* SETTING_FNAME = "SETTINGS.txt";
     //SETTING MANAGER INSTANCE
     setting_manager_t settings;
