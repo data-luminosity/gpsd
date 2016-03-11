@@ -29,7 +29,7 @@ const gps_priv_t DEFAULT_GPS_PRIV_SETTINGS = {
 .type = GPS_TYPE_DEFAULT,
 .epoch = GPS_EPOCH_DEFAULT,
 .epsilon = GPS_EPSILON_DEFAULT
-}
+};
 
 
 #endif

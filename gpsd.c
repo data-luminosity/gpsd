@@ -52,6 +52,7 @@
 
 //NEW INCLUDES
 #include "setting_manager.h"
+#include "priv_handler.h"
 #include <sys/time.h>
 
 /*
@@ -1061,7 +1062,7 @@ static void json_devicelist_dump(char *reply, size_t replylen)
 			     reply + strlen(reply), replylen - strlen(reply));
 	    cp = reply + strlen(reply);
 	    *--cp = '\0';
-	    *--c/p = '\0';
+	    *--cp = '\0';
 	    (void)strlcat(reply, ",", replylen);
 	}
 
@@ -1087,6 +1088,8 @@ static void rstrip(char *str)
     }
 }
 
+subscriber_check_epoch(struct subscriber_t s);
+
 static void handle_request(struct subscriber_t *sub,
 			   const char *buf, const char **after,
 			   char *reply, size_t replylen)
@@ -1106,7 +1109,7 @@ static void handle_request(struct subscriber_t *sub,
             ++buf;
         }
         else{
-            int status = json_id_read(buf,&(sub->app_id) ,NULL);
+            int status = json_id_read(buf,&(sub->app_id), NULL);
             //dumping error message for invalid id
             if (status != 0) {
                 (void)snprintf(reply, replylen,
@@ -1317,7 +1320,7 @@ static void handle_request(struct subscriber_t *sub,
 	char tbuf[JSON_DATE_MAX+1];
 	int active = 0;
 	buf += 5;
-	for (devp = devices; devp < devices + MAX_DEVICES; d/gsevp++)
+	for (devp = devices; devp < devices + MAX_DEVICES; devp++)
 	    if (allocated_device(devp) && subscribed(sub, devp))
 		if ((devp->observed & GPS_TYPEMASK) != 0)
 		    active++;

@@ -46,6 +46,9 @@ int libgps_json_unpack(const char *, struct gps_data_t *,
 		       const char **);
 #ifdef __cplusplus
 }
+
+int json_id_read(const char *buf, unsigned int* sub_id, const char **endptr);
+
 #endif
 
 /* these values don't matter in themselves, they just have to be out-of-band */
