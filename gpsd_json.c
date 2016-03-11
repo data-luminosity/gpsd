@@ -30,6 +30,8 @@ PERMISSIONS
 #include "revision.h"
 #include <sys/time.h>
 
+#include "priv_handler.h"
+
 /* *INDENT-OFF* */
 #define JSON_BOOL(x)	((x)?"true":"false")
 
@@ -217,7 +219,7 @@ void json_tpv_dump(const struct gps_device_t *session,
     (void)strlcat(reply, "}\r\n", replylen);
 }
 void json_tpv_private_dump(const struct gps_device_t *session,
-		   const struct policy_t *policy CONDITIONALLY_UNUSED,
+		   struct policy_t *policy CONDITIONALLY_UNUSED,
 		   char *reply, size_t replylen)
 {
     const struct gps_data_t *gpsdata = &session->gpsdata;
@@ -249,11 +251,11 @@ void json_tpv_private_dump(const struct gps_device_t *session,
     if (gpsdata->fix.mode >= MODE_2D) {
         
 
-    gps_fix_t modified_fix;
-    gps_data_modify(&CONDITIONALLY_UNUSED->gps_priv_settings,
-            &gpsdata->fix, &modifed_fix);
+    struct gps_fix_t modified_fix;
+    gps_data_modify(&policy->gps_priv_settings,
+            &gpsdata->fix, &modified_fix);
     //updating time since last update
-    gettimeofday(&CONDITIONALLY_UNUSED->last_update_time,NULL);
+    gettimeofday(&policy->last_update_time,NULL);
 
     if (isnan(modified_fix.latitude) == 0)
 	    str_appendf(reply, replylen,

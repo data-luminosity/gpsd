@@ -20,6 +20,8 @@ extern "C" {
 #include <stdio.h>
 #include <pthread.h>	/* pacifies OpenBSD's compiler */
 #include <sys/time.h>
+
+#include "app_entry.h"
 /*
  * 4.1 - Base version for initial JSON protocol (Dec 2009, release 2.90)
  * 4.2 - AIS application IDs split into DAC and FID (July 2010, release 2.95)

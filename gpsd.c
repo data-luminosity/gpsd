@@ -54,8 +54,6 @@
 #include "setting_manager.h"
 #include <sys/time.h>
 
-const char* SETTING_FNAME = "SETTINGS.txt"
-
 /*
  * The name of a tty device from which to pick up whatever the local
  * owning group for tty devices is.  Used when we drop privileges.
@@ -170,7 +168,7 @@ static void onsig(int sig)
     signalled = (sig_atomic_t) sig;
 }
 
-stati void typelist(void)
+static void typelist(void)
 /* list installed drivers and enabled features */
 {
     const struct gps_type_t **dp;
@@ -501,7 +499,7 @@ struct subscriber_t
     int fd;			/* client file descriptor. -1 if unused */
     time_t active;		/* when subscriber last polled for data */
     pthread_mutex_t mutex;	/* serialize access to fd */
-   
+    struct policy_t policy;   
     bool enabled; 
     unsigned int app_id;
 };
@@ -1108,7 +1106,7 @@ static void handle_request(struct subscriber_t *sub,
             ++buf;
         }
         else{
-            int status = json_id_read(buf,sub ,NULL);
+            int status = json_id_read(buf,&(sub->app_id) ,NULL);
             //dumping error message for invalid id
             if (status != 0) {
                 (void)snprintf(reply, replylen,
@@ -1117,8 +1115,10 @@ static void handle_request(struct subscriber_t *sub,
                 gpsd_log(&context.errout, LOG_ERROR, "response: %s\n", reply);
 
             }
-            else
+            else{
+                sub->enabled = 1; 
                 json_id_dump(reply, replylen);
+            }
         }
 
     if (str_starts_with(buf, "DEVICES;")) {
@@ -1849,6 +1849,8 @@ static void gpsd_terminate(struct gps_context_t *context CONDITIONALLY_UNUSED)
 
 int main(int argc, char *argv[])
 {
+
+    const char* SETTING_FNAME = "SETTINGS.txt";
     //SETTING MANAGER INSTANCE
     setting_manager_t settings;
     setting_manager_new(&settings,  SETTING_FNAME);
@@ -2565,6 +2567,7 @@ shutdown:
 	(void)unlink(pid_file);
     return 0;
 }
+
 subscriber_check_epoch(struct subscriber_t s){
     int epoch = s->policy->gps_priv_settings.epoch;
     timeval_t last_update = s->policy->last_update_time;
