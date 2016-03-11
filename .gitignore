@@ -152,3 +152,4 @@ libQgpsmm/binaries/*
 nohup.out
 *.bak
 tmp*
+*.swo
