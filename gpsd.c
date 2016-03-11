@@ -2413,7 +2413,7 @@ int main(int argc, char *argv[])
 
 	    lock_subscriber(sub);
 	    if (FD_ISSET(sub->fd, &rfds)) {
-		char buf[BUFSIZ];/
+		char buf[BUFSIZ];
 		int buflen;
 
 		unlock_subscriber(sub);
