@@ -1128,7 +1128,7 @@ static void handle_request(struct subscriber_t *sub,
                 json_id_dump(reply, replylen);
             }
         }
-
+    }
     if (str_starts_with(buf, "DEVICES;")) {
 	buf += 8;
 	json_devicelist_dump(reply, replylen);
