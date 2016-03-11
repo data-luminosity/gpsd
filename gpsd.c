@@ -2285,7 +2285,7 @@ int main(int argc, char *argv[])
 			client->fd = ssock;
 			client->active = time(NULL);
 			client->enabled = 0;//need to pass in a command before enabled
-            gettimeofday(&client->policy->last_update_time); 
+            gettimeofday(&(client->policy.last_update_time), NULL); 
             //TODO set up client's app_id and use setting manager
             //to get app gps privact setting
             //initialize it with teh subsriber_t modified
@@ -2312,7 +2312,7 @@ int main(int argc, char *argv[])
         if (subscribers[i].enabled){
             app_entry_t app;
             if (setting_manager_get_app_entry(&settings,subscribers[i].app_id ,&app))
-                gps_priv_copy(&app.gps_settings, 
+                gps_priv_copy(&app.gps_setting, 
                         &subscribers[i].policy.gps_priv_settings);
             //default settings
             else
