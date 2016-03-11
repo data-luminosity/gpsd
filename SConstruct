@@ -853,7 +853,7 @@ if env['libgpsmm']:
 libgpsd_sources = [
     "app_entry.c",
     "priv_handler.c",
-    "setting_manager.c"
+    "setting_manager.c",
     
     
     "bsd_base64.c",
