@@ -750,7 +750,6 @@ int main(int argc, char *argv[])
 	    break;
 	}
     }
-
     /* Grok the server, port, and device. */
     if (optind < argc) {
 	gpsd_source_spec(argv[optind], &source);
@@ -777,6 +776,9 @@ int main(int argc, char *argv[])
     if (source.device != NULL)
 	flags |= WATCH_DEVICE;
     (void)gps_stream(&gpsdata, flags, source.device);
+
+    //TODO pass app id here
+
 
     /* heart of the client */
     for (;;) {
