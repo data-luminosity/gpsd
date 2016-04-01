@@ -31,7 +31,7 @@ int json_id_read(const char *buf, int* sub_id, const char **endptr){
                                 .len = sizeof(unsigned int)};
 
     int status = json_read_object(buf, &json_id, endptr);
-    printf("id read in is %d\n", *sub_id);
+    //gpsd_log(&context.errorout, LOG_ERROR, "id read in is %d\n", *sub_id);
     if (status != 0)
         return status;
 
