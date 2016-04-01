@@ -1108,6 +1108,7 @@ static void handle_request(struct subscriber_t *sub,
     //handling id pass
     if (str_starts_with(buf, "APP_ID")
             && (buf[6] == ';' || buf[6] == '=')){
+        printf("reading in app id!\n");
         const char* start = buf;
         buf += 6;
         if (*buf == ';'){
@@ -2321,6 +2322,8 @@ int main(int argc, char *argv[])
         if (subscribers[i].enabled){
             app_entry_t app;
             if (setting_manager_get_app_entry(&settings,subscribers[i].app_id ,&app))
+                //asking setting_manager for priv settings based on app_id
+                printf("FOUND APP_ID from settings manager: %d" subscriber[i].app_id);
                 gps_priv_copy(&app.gps_setting, 
                         &subscribers[i].policy.gps_priv_settings);
             //default settings

@@ -15,6 +15,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+extern int gps_sock_pass_id(struct gps_data_t*, int, void *);
+
 extern int gps_sock_open(const char *, const char *,
 		      struct gps_data_t *);
 extern int gps_sock_close(struct gps_data_t *);

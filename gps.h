@@ -2058,6 +2058,8 @@ struct gps_data_t {
     void *privdata;
 };
 
+extern int gps_pass_id(struct gps_data_t * gpsdata , int app_id, void *d);
+
 extern int gps_open(const char *, const char *,
 		      struct gps_data_t *);
 extern int gps_close(struct gps_data_t *);

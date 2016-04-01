@@ -261,6 +261,19 @@ int gps_sock_send(struct gps_data_t *gpsdata, const char *buf)
 #endif
 }
 
+int gps_sock_pass_id(struct gps_data_t * gpsdata, int id, void *d){
+/* passes in an int id as command to GPSD */
+    char buf[GPS_JSON_COMMAND_MAX];
+    //reading in appid
+
+    (void)strlcpy(buf, "APPID;",sizeof(buf));
+    
+    (void)strlcpy(buf+6, (char*)&id, sizeof(int));
+
+    return gps_send(gpsdata, buf);
+}
+
+
 int gps_sock_stream(struct gps_data_t *gpsdata, unsigned int flags, void *d)
 /* ask gpsd to stream reports at you, hiding the command details */
 {

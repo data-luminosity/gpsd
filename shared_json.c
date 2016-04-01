@@ -24,13 +24,14 @@ PERMISSIONS
 #include "gps_json.h"
 
 
-int json_id_read(const char *buf, unsigned int* sub_id, const char **endptr){
+int json_id_read(const char *buf, int* sub_id, const char **endptr){
     //reading the int from buf
     const struct json_attr_t json_id = {"id", t_uinteger, 
-                                .addr.uinteger = sub_id,
+                                .addr.integer = sub_id,
                                 .len = sizeof(unsigned int)};
 
     int status = json_read_object(buf, &json_id, endptr);
+    printf("id read in is %d\n", *sub_id);
     if (status != 0)
         return status;
 

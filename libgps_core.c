@@ -161,6 +161,7 @@ int gps_read(struct gps_data_t *gpsdata CONDITIONALLY_UNUSED)
     return status;
 }
 
+
 int gps_send(struct gps_data_t *gpsdata CONDITIONALLY_UNUSED, const char *fmt CONDITIONALLY_UNUSED, ...)
 /* send a command to the gpsd instance */
 {
@@ -190,6 +191,19 @@ int gps_stream(struct gps_data_t *gpsdata CONDITIONALLY_UNUSED,
 #ifdef SOCKET_EXPORT_ENABLE
     /* cppcheck-suppress redundantAssignment */
     status = gps_sock_stream(gpsdata, flags, d);
+#endif /* SOCKET_EXPORT_ENABLE */
+
+    return status;
+}
+
+int gps_pass_id(struct gps_data_t * gpsdata CONDITIONALLY_UNUSED, 
+        int app_id, void *d CONDITIONALLY_UNUSED){
+    
+    int status = -1;
+
+#ifdef SOCKET_EXPORT_ENABLE
+    /* cppcheck-suppress redundantAssignment */
+    status = gps_sock_pass_id(gpsdata, app_id, d);
 #endif /* SOCKET_EXPORT_ENABLE */
 
     return status;

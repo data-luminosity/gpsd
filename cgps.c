@@ -773,11 +773,16 @@ int main(int argc, char *argv[])
 
     status_timer = time(NULL);
 
+    //TODO pass app id here
+    //some int idea
+    int id = 0;
+    (void)gps_pass_id(&gpsdata, id, source.device);
+
+
     if (source.device != NULL)
 	flags |= WATCH_DEVICE;
     (void)gps_stream(&gpsdata, flags, source.device);
 
-    //TODO pass app id here
 
 
     /* heart of the client */
