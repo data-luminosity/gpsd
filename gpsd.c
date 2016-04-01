@@ -2321,15 +2321,17 @@ int main(int argc, char *argv[])
     for (int i = 0; i < MAX_CLIENTS; i++){
         if (subscribers[i].enabled){
             app_entry_t app;
-            if (setting_manager_get_app_entry(&settings,subscribers[i].app_id ,&app))
+            if (setting_manager_get_app_entry(&settings,subscribers[i].app_id ,&app)) {
                 //asking setting_manager for priv settings based on app_id
-                printf("FOUND APP_ID from settings manager: %d" subscriber[i].app_id);
+                printf("FOUND APP_ID from settings manager: %d", subscribers[i].app_id);
                 gps_priv_copy(&app.gps_setting, 
                         &subscribers[i].policy.gps_priv_settings);
+            }
             //default settings
-            else
+            else {
                 gps_priv_copy(&DEFAULT_GPS_PRIV_SETTINGS
                         , &subscribers[i].policy.gps_priv_settings);
+            }
         }
     }
 #endif /* SOCKET_EXPORT_ENABLE */
