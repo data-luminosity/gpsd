@@ -8,7 +8,6 @@
 #define GPS_EPSILON_DEFAULT 0
 #define GPS_TYPE_DEFAULT 0
 
-
 /*
  *gps_priv is just settings of an app for gps
  *clear definition of a type, epoch, and epsilon
@@ -33,12 +32,11 @@ typedef struct app_entry{
     bool is_modified; //modified flags to see if an app entry is modified
 } app_entry_t;
 
-
 app_entry_t* app_entry_new(app_entry_t* app, app_id_t, gps_priv_t*);
 app_entry_t* app_entry_newDefault(app_entry_t* app, app_id_t);
 app_entry_t* app_entry_copy(app_entry_t* src, app_entry_t* dest);
 bool app_entry_set_gps_settings(app_entry_t* app, gps_priv_t *);
 bool app_entry_equals(app_entry_t*, app_entry_t*);
-
+void app_entry_dump(app_entry_t*);
 
 #endif //APP_ENTRY_H

@@ -203,6 +203,7 @@ int gps_pass_id(struct gps_data_t * gpsdata CONDITIONALLY_UNUSED,
 
 #ifdef SOCKET_EXPORT_ENABLE
     /* cppcheck-suppress redundantAssignment */
+    printf("###ATTEMPT: pass in app id %d to lower level socket call\n", app_id);
     status = gps_sock_pass_id(gpsdata, app_id, d);
 #endif /* SOCKET_EXPORT_ENABLE */
 

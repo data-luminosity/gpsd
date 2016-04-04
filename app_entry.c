@@ -71,3 +71,14 @@ app_entry_t* app_entry_copy(app_entry_t* src, app_entry_t* dest){
     gps_priv_copy(&src->gps_setting, &dest->gps_setting);
     
 }
+
+void app_entry_dump(app_entry_t* app){
+
+    printf ("%d\tapp id:%d\t", app->app_id);
+    gps_priv_t gps = app->gps_setting;
+
+    printf("type: %d\tepoch: %ld\tepsilon:%d\t\n",
+            gps.type, gps.epoch, gps.epsilon);
+
+
+}

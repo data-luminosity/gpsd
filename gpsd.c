@@ -1115,6 +1115,8 @@ static void handle_request(struct subscriber_t *sub,
             ++buf;
         }
         else{
+
+            printf("######ATTEMPTING TO PASS IN APP ID########\n");
             int status = json_id_read(buf,&(sub->app_id), NULL);
             //dumping error message for invalid id
             if (status != 0) {
@@ -1872,7 +1874,7 @@ int main(int argc, char *argv[])
     //SETTING MANAGER INSTANCE
     setting_manager_t settings;
     setting_manager_new(&settings,  SETTING_FNAME);
-
+    setting_manager_dump(&settings);
     /* some of these statics suppress -W warnings due to longjmp() */
 #ifdef SOCKET_EXPORT_ENABLE
     static char *gpsd_service = NULL;
@@ -2296,11 +2298,6 @@ int main(int argc, char *argv[])
 			client->active = time(NULL);
 			client->enabled = 0;//need to pass in a command before enabled
             gettimeofday(&(client->policy.last_update_time), NULL); 
-            //TODO set up client's app_id and use setting manager
-            //to get app gps privact setting
-            //initialize it with teh subsriber_t modified
-            
-            
             gpsd_log(&context.errout, LOG_SPIN,
 				 "client %s (%d) connect on fd %d\n", c_ip,
 				 sub_index(client), ssock);
@@ -2318,12 +2315,15 @@ int main(int argc, char *argv[])
 #ifdef SOCKET_EXPORT_ENABLE
     //UPDATE privacy settings from setting manager
     //TODO remove duplicate app_id's
+    printf("#########CHECKING ALL CLIENTS FOR INITALIZATION########\n");
     for (int i = 0; i < MAX_CLIENTS; i++){
         if (subscribers[i].enabled){
             app_entry_t app;
+            printf("trying to find app id%d\n", subscribers[i].app_id);
             if (setting_manager_get_app_entry(&settings,subscribers[i].app_id ,&app)){
-                //asking setting_manager for priv settings based on app_id
-                gpsd_log(&context.errout, LOG_ERROR, "FOUND APP_ID from settings manager:                     %d", subscribers[i].app_id);
+                printf("FOUND APP ID\n");
+                app_entry_dump(&app);
+
                 gps_priv_copy(&app.gps_setting, 
                         &subscribers[i].policy.gps_priv_settings);
             //default settings

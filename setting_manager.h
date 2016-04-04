@@ -25,6 +25,7 @@ bool save_next_app_gps(FILE* file, app_entry_t* src);
 app_id_t setting_manager_get_app_entry(setting_manager_t* , app_id_t, app_entry_t* dest);
 app_id_t* setting_manager_set_app_entry(setting_manager_t* , app_entry_t* src, app_entry_t* dest);
 
+void setting_manager_dump(setting_manager_t*);
 /*
 const gps_priv_t DEFAULT_GPS_PRIV_SETTINGS = {
 .type = GPS_TYPE_DEFAULT,

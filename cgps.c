@@ -776,6 +776,8 @@ int main(int argc, char *argv[])
     //TODO pass app id here
     //some int idea
     int id = 0;
+
+    printf("###ATTEMPT: pass in app id %d using interface call\n", id);
     (void)gps_pass_id(&gpsdata, id, source.device);
 
 

@@ -265,11 +265,15 @@ int gps_sock_pass_id(struct gps_data_t * gpsdata, int id, void *d){
 /* passes in an int id as command to GPSD */
     char buf[GPS_JSON_COMMAND_MAX];
     //reading in appid
-
-    (void)strlcpy(buf, "APPID;",sizeof(buf));
     
-    (void)strlcpy(buf+6, (char*)&id, sizeof(int));
-
+    char beg[14] = "?APPID={\"id\":";
+    strcpy(buf, beg); 
+    memcpy(buf+13, &id, sizeof(int));
+    strcpy(buf+13+sizeof(int), "}");
+    
+    printf("RAW BUFFER DUMP PASS_ID: ");
+    printf(buf);
+    printf("\n\n\n");
     return gps_send(gpsdata, buf);
 }
 

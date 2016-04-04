@@ -87,3 +87,20 @@ app_id_t setting_manager_get_app_entry(setting_manager_t* sm , app_id_t id, app_
     }
     return id;
 }
+
+void setting_manager_dump(setting_manager_t* sm){
+    if (sm == NULL)
+        printf("sm is null!\n");
+    printf("###########SETTING MANAGER###############\n");
+    printf("setting manager has %d applications\n", 
+            sm->n_apps);
+    for (int i = 0; i < sm->n_apps; i++){
+        app_entry_t curr_app = sm->apps[i];
+        printf ("app #: %d\tapp id:%d\t",i, curr_app.app_id);
+        gps_priv_t curr_gps = curr_app.gps_setting;
+
+        printf("type: %d\tepoch: %ld\tepsilon:%d\t\n",
+                curr_gps.type, curr_gps.epoch, curr_gps.epsilon);
+    } 
+    printf("###########SETTING MANAGER###############\n");
+}
