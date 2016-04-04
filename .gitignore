@@ -153,3 +153,4 @@ nohup.out
 *.bak
 tmp*
 *.swo
+.DS_Store
