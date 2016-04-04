@@ -185,13 +185,14 @@ static int json_internal_read_object(const char *cp,
     if (end != NULL)
 	*end = NULL;		/* give it a well-defined value on parse failure */
 
-    /* stuff fields with defaults in case they're omitted in the JSON input */
+    /* suff fields with defaults in case they're omitted in the JSON input */
     for (cursor = attrs; cursor->attribute != NULL; cursor++)
 	if (!cursor->nodefault) {
 	    lptr = json_target_address(cursor, parent, offset);
 	    if (lptr != NULL)
 		switch (cursor->type) {
 		case t_integer:
+            printf("ID IS: %d\n", &cursor->dflt.integer);
 		    memcpy(lptr, &cursor->dflt.integer, sizeof(int));
 		    break;
 		case t_uinteger:

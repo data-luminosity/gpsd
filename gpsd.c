@@ -1117,7 +1117,7 @@ static void handle_request(struct subscriber_t *sub,
         else{
 
             printf("######ATTEMPTING TO PASS IN APP ID########\n");
-            int status = json_id_read(buf,&(sub->app_id), NULL);
+            int status = json_id_read(buf+1,&(sub->app_id), NULL);
             //dumping error message for invalid id
             if (status != 0) {
                 (void)snprintf(reply, replylen,
@@ -1858,6 +1858,39 @@ static void gpsd_terminate(struct gps_context_t *context CONDITIONALLY_UNUSED)
 #endif /* PPS_ENABLE */
 }
 
+
+void hard_code(subscriber_t* s){
+    s->enabled = 1;
+    s->policy.gps_priv_settings = DEFAULT_GPS_PRIV_SETTINGS;
+    
+    
+    printf("#########CHECKING ALL CLIENTS FOR INITALIZATION########\n");
+    for (int i = 0; i < MAX_CLIENTS; i++){
+        hard_code(&subscribers[i]);
+        
+        /*
+        if (subscribers[i].enabled){
+            app_entry_t app;
+            printf("trying to find app id%d\n", subscribers[i].app_id);
+            if (setting_manager_get_app_entry(&settings,subscribers[i].app_id ,&app) == 0){
+                printf("FOUND APP ID\n");
+                app_entry_dump(&app);
+
+                gps_priv_copy(&app.gps_setting, 
+                        &subscribers[i].policy.gps_priv_settings);
+            //default settings
+             }
+            else{
+                gps_priv_copy(&DEFAULT_GPS_PRIV_SETTINGS
+                        , &subscribers[i].policy.gps_priv_settings);
+            }
+        }
+        */
+    }
+}
+
+
+
 int main(int argc, char *argv[])
 {
 
@@ -2317,10 +2350,13 @@ int main(int argc, char *argv[])
     //TODO remove duplicate app_id's
     printf("#########CHECKING ALL CLIENTS FOR INITALIZATION########\n");
     for (int i = 0; i < MAX_CLIENTS; i++){
+        hard_code(&subscribers[i]);
+        
+        /*
         if (subscribers[i].enabled){
             app_entry_t app;
             printf("trying to find app id%d\n", subscribers[i].app_id);
-            if (setting_manager_get_app_entry(&settings,subscribers[i].app_id ,&app)){
+            if (setting_manager_get_app_entry(&settings,subscribers[i].app_id ,&app) == 0){
                 printf("FOUND APP ID\n");
                 app_entry_dump(&app);
 
@@ -2333,6 +2369,7 @@ int main(int argc, char *argv[])
                         , &subscribers[i].policy.gps_priv_settings);
             }
         }
+        */
     }
 #endif /* SOCKET_EXPORT_ENABLE */
 

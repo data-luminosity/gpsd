@@ -777,14 +777,11 @@ int main(int argc, char *argv[])
     //some int idea
     int id = 0;
 
-    printf("###ATTEMPT: pass in app id %d using interface call\n", id);
-    (void)gps_pass_id(&gpsdata, id, source.device);
-
-
+    //printf("###ATTEMPT: pass in app id %d using interface call\n", id);
+    //(void)gps_pass_id(&gpsdata, id, source.device);
     if (source.device != NULL)
-	flags |= WATCH_DEVICE;
+      	flags |= WATCH_DEVICE;
     (void)gps_stream(&gpsdata, flags, source.device);
-
 
 
     /* heart of the client */

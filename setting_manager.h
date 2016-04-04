@@ -22,7 +22,7 @@ bool setting_manager_save_gps(setting_manager_t*, char*);
 bool read_next_app_gps(FILE* file ,app_entry_t* dest);
 bool save_next_app_gps(FILE* file, app_entry_t* src);
 
-app_id_t setting_manager_get_app_entry(setting_manager_t* , app_id_t, app_entry_t* dest);
+int setting_manager_get_app_entry(setting_manager_t* , app_id_t, app_entry_t* dest);
 app_id_t* setting_manager_set_app_entry(setting_manager_t* , app_entry_t* src, app_entry_t* dest);
 
 void setting_manager_dump(setting_manager_t*);

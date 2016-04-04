@@ -26,12 +26,13 @@ PERMISSIONS
 
 int json_id_read(const char *buf, int* sub_id, const char **endptr){
     //reading the int from buf
-    const struct json_attr_t json_id = {"id", t_uinteger, 
+    printf("####PASSED IN JSON ID FORMAT: %s\n",buf);
+    
+    const struct json_attr_t json_id = {"id", t_integer, 
                                 .addr.integer = sub_id,
-                                .len = sizeof(unsigned int)};
+                                .len = sizeof(int)};
 
     int status = json_read_object(buf, &json_id, endptr);
-    //gpsd_log(&context.errorout, LOG_ERROR, "id read in is %d\n", *sub_id);
     if (status != 0)
         return status;
 

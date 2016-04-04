@@ -78,14 +78,14 @@ bool setting_manager_save_gps(setting_manager_t* sm, char* fname ){
     return 1;
 }
 
-app_id_t setting_manager_get_app_entry(setting_manager_t* sm , app_id_t id, app_entry_t* dest){
+int setting_manager_get_app_entry(setting_manager_t* sm , app_id_t id, app_entry_t* dest){
     for (int i = 0; i < sm->n_apps; i++){
         if (sm->apps[i].app_id == id){
             app_entry_copy(&sm->apps[i], dest);
-            break;
+            return 0;
         }
     }
-    return id;
+    return -1;
 }
 
 void setting_manager_dump(setting_manager_t* sm){
