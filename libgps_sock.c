@@ -264,13 +264,14 @@ int gps_sock_send(struct gps_data_t *gpsdata, const char *buf)
 int gps_sock_pass_id(struct gps_data_t * gpsdata, int id, void *d){
 /* passes in an int id as command to GPSD */
     char buf[GPS_JSON_COMMAND_MAX];
-    //reading in appid
     
+    //reading in appid
     char beg[14] = "?APPID={\"id\":";
     strcpy(buf, beg); 
-    memcpy(buf+13, &id, sizeof(int));
-    strcpy(buf+13+sizeof(int), "}");
-    
+    memcpy(buf+strlen(beg), &id, sizeof(int));
+    strcpy(buf+strlen(beg)+sizeof(int), "}");
+    printf(buf); 
+
     printf("RAW BUFFER DUMP PASS_ID: ");
     printf(buf);
     printf("\n\n\n");
