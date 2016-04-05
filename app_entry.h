@@ -22,7 +22,7 @@ typedef struct gps_priv{
 gps_priv_t* gps_priv_new(gps_priv_t*, int t, long epo, int eps);
 gps_priv_t* gps_priv_newDefault(gps_priv_t*);
 gps_priv_t* gps_priv_copy(gps_priv_t* src, gps_priv_t* dest);
-
+void gps_priv_dump(gps_priv_t*);
 
 
 typedef int app_id_t;

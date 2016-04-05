@@ -50,6 +50,12 @@
 #include "sd_socket.h"
 #endif
 
+//new includes
+#include "setting_manager.h"
+#include "priv_handler.h"
+#include <sys/time.h>
+
+
 /*
  * The name of a tty device from which to pick up whatever the local
  * owning group for tty devices is.  Used when we drop privileges.
@@ -496,7 +502,33 @@ struct subscriber_t
     time_t active;		/* when subscriber last polled for data */
     struct policy_t policy;	/* configurable bits */
     pthread_mutex_t mutex;	/* serialize access to fd */
+
+    bool enabled;
+    app_id_t id;
 };
+
+void subscriber_t_init(struct subscriber_t* s);
+void subscriber_t_init_DUMMY(struct subscriber_t* s);
+void subscriber_t_dump(struct subscriber_t* s);
+
+void subscriber_t_init(struct subscriber_t* s){
+    printf("###initializing a new connextion###\n");
+    s->enabled = 0;
+    gettimeofday(&(s->policy.last_update_time), NULL);
+}
+
+void subscriber_t_init_DUMMY(struct subscriber_t* s){
+    printf("###initializing a new connection with dummy id 0\n");
+    s->enabled = 1;
+    s->id = 0;
+}
+
+void subscriber_t_dump(struct subscriber_t* s){
+    printf("ENABLED: %d\tAPP ID: %d\t", s->enabled, s->id);
+    gps_priv_dump(&(s->policy.gps_settings));
+}
+
+
 
 #define subscribed(sub, devp)    (sub->policy.watcher && (sub->policy.devpath[0]=='\0' || strcmp(sub->policy.devpath, devp->gpsdata.dev.path)==0))
 
@@ -1803,6 +1835,19 @@ static void gpsd_terminate(struct gps_context_t *context CONDITIONALLY_UNUSED)
 
 int main(int argc, char *argv[])
 {
+    gps_priv_t DEFAULT_SETTINGS ={
+        .type = 0, .epoch = 100, .epsilon = 100
+    
+    };
+    
+    //INITIALIZING SETTINGS MANAGER
+    //TODO remove duplicate app_id's
+    char* SETTING_FNAME = "SETTINGS.txt";
+    setting_manager_t settings;
+    setting_manager_new(&settings, SETTING_FNAME);
+    setting_manager_dump(&settings);
+
+
     /* some of these statics suppress -W warnings due to longjmp() */
 #ifdef SOCKET_EXPORT_ENABLE
     static char *gpsd_service = NULL;
@@ -2228,11 +2273,37 @@ int main(int argc, char *argv[])
 			(void)throttled_write(client, announce,
 					      strlen(announce));
 		    }
-		}
+		    //initializing a new client means initially it is NOT enabled
+            //subscriber_t_init(client);
+            subscriber_t_init_DUMMY(client);
+        }
 		FD_CLR(msocks[i], &rfds);
 	    }
 	}
 #endif /* SOCKET_EXPORT_ENABLE */
+
+
+#ifdef SOCKET_EXPORT_ENABLE
+    printf("####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED\n");
+    for (int i = 0; i < MAX_CLIENTS;i++){
+        //TODO maybe turn off enabled bit after done(?)
+        if (subscribers[i].enabled){
+            printf("###APP %d is enabled!\n", subscribers[i].id); 
+            app_entry_t app;
+            if (setting_manager_get_app_entry(&settings, subscribers[i].id, &app) == 0){
+                printf("###settings manager found entry!\n");
+                gps_priv_copy(&app.gps_setting, &subscribers[i].policy.gps_settings);            
+            }
+            else{
+                gps_priv_copy(&DEFAULT_SETTINGS, &subscribers[i].policy.gps_settings);
+            }
+            gps_priv_dump(&subscribers[i].policy.gps_settings); 
+        }
+
+        
+    }
+#endif
+
 
 #ifdef CONTROL_SOCKET_ENABLE
 	/* also be open to new control-socket connections */

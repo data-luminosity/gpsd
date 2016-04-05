@@ -32,6 +32,10 @@ gps_priv_t* gps_priv_copy(gps_priv_t* src, gps_priv_t* dest){
     return src;
 }
 
+void gps_priv_dump(gps_priv_t* gps){
+    printf("type: %d\t epoch: %ld\t epsilon:%d\t", gps->type, gps->epoch, gps->epsilon);
+}
+
 ///APP ENTRY
 app_entry_t* app_entry_new(app_entry_t* app, app_id_t id, gps_priv_t* gps){
     if (app == NULL)
@@ -76,9 +80,7 @@ void app_entry_dump(app_entry_t* app){
 
     printf ("%d\tapp id:%d\t", app->app_id);
     gps_priv_t gps = app->gps_setting;
-
-    printf("type: %d\tepoch: %ld\tepsilon:%d\t\n",
-            gps.type, gps.epoch, gps.epsilon);
-
+    gps_priv_dump(&(app->gps_setting));
+    printf("\n");
 
 }
