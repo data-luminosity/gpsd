@@ -24,7 +24,7 @@
 # * Coveraging mode: gcc "-coverage" flag requires a hack for building the python bindings
 
 # Release identification begins here
-gpsd_version = "3.16-dev"
+gpsd_version = "3.15"
 
 # client library version
 libgps_version_current   = 22
@@ -541,8 +541,6 @@ else:
     if env['ncurses']:
         if config.CheckPKG('ncurses'):
             ncurseslibs = pkg_config('ncurses')
-	    if config.CheckPKG('tinfo'):
-		ncurseslibs += pkg_config('tinfo')
         elif WhereIs('ncurses5-config'):
             ncurseslibs = ['!ncurses5-config --libs --cflags']
         elif WhereIs('ncursesw5-config'):
@@ -853,6 +851,11 @@ if env['libgpsmm']:
     libgps_sources.append("libgpsmm.cpp")
 
 libgpsd_sources = [
+    "app_entry.c",
+    "priv_handler.c",
+    "setting_manager.c",
+    
+    
     "bsd_base64.c",
     "crc24q.c",
     "gpsd_json.c",
@@ -1517,7 +1520,7 @@ else:
     rtcm_regress = Utility('rtcm-regress', [gpsdecode], [
         '@echo "Testing RTCM decoding..."',
         '@for f in $SRCDIR/test/*.rtcm2; do '
-            'echo "\tTesting $${f}..."; '
+            'echo "Testing $${f}..."; '
             'TMPFILE=`mktemp -t gpsd-test-XXXXXXXXXXXXXX.chk`; '
             '$SRCDIR/gpsdecode -u -j <$${f} >$${TMPFILE}; '
             'diff -ub $${f}.chk $${TMPFILE}; '
@@ -1545,7 +1548,7 @@ else:
     aivdm_regress = Utility('aivdm-regress', [gpsdecode], [
         '@echo "Testing AIVDM decoding w/ CSV format..."',
         '@for f in $SRCDIR/test/*.aivdm; do '
-            'echo "\tTesting $${f}..."; '
+            'echo "Testing $${f}..."; '
             'TMPFILE=`mktemp -t gpsd-test-XXXXXXXXXXXXXX.chk`; '
             '$SRCDIR/gpsdecode -u -c <$${f} >$${TMPFILE}; '
             'diff -ub $${f}.chk $${TMPFILE} || echo "Test FAILED!"; '
@@ -1553,7 +1556,7 @@ else:
         'done;',
         '@echo "Testing AIVDM decoding w/ JSON unscaled format..."',
         '@for f in $SRCDIR/test/*.aivdm; do '
-            'echo "\tTesting $${f}..."; '
+            'echo "  Testing $${f}..."; '
             'TMPFILE=`mktemp -t gpsd-test-XXXXXXXXXXXXXX.chk`; '
             '$SRCDIR/gpsdecode -u -j <$${f} >$${TMPFILE}; '
             'diff -ub $${f}.ju.chk $${TMPFILE} || echo "Test FAILED!"; '
@@ -1561,7 +1564,7 @@ else:
         'done;',
         '@echo "Testing AIVDM decoding w/ JSON scaled format..."',
         '@for f in $SRCDIR/test/*.aivdm; do '
-            'echo "\tTesting $${f}..."; '
+            'echo "  Testing $${f}..."; '
             'TMPFILE=`mktemp -t gpsd-test-XXXXXXXXXXXXXX.chk`; '
             '$SRCDIR/gpsdecode -j <$${f} >$${TMPFILE}; '
             'diff -ub $${f}.js.chk $${TMPFILE} || echo "Test FAILED!"; '
