@@ -29,6 +29,8 @@ PERMISSIONS
 #include "timespec.h"
 #include "revision.h"
 
+#include "priv_handler.h"
+
 /* *INDENT-OFF* */
 #define JSON_BOOL(x)	((x)?"true":"false")
 
@@ -121,6 +123,104 @@ void json_version_dump( char *reply, size_t replylen)
 #endif /* TIMING_ENABLE */
 
 
+void json_tpv_dump_PRIV(const struct gps_device_t *session,
+		   const struct policy_t *policy CONDITIONALLY_UNUSED,
+		   char *reply, size_t replylen)
+{
+    const struct gps_data_t *gpsdata = &session->gpsdata;
+
+    assert(replylen > sizeof(char *));
+    (void)strlcpy(reply, "{\"class\":\"TPV\",", replylen);
+    if (gpsdata->dev.path[0] != '\0')
+	str_appendf(reply, replylen, "\"device\":\"%s\",", gpsdata->dev.path);
+    str_appendf(reply, replylen, "\"mode\":%d,", gpsdata->fix.mode);
+    if (isnan(gpsdata->fix.time) == 0) {
+	char tbuf[JSON_DATE_MAX+1];
+	str_appendf(reply, replylen,
+		       "\"time\":\"%s\",",
+		       unix_to_iso8601(gpsdata->fix.time, tbuf, sizeof(tbuf)));
+    }
+    if (isnan(gpsdata->fix.ept) == 0)
+	str_appendf(reply, replylen, "\"ept\":%.3f,", gpsdata->fix.ept);
+    /*
+     * Suppressing TPV fields that would be invalid because the fix
+     * quality doesn't support them is nice for cutting down on the
+     * volume of meaningless output, but the real reason to do it is
+     * that we've observed that geodetic fix computation is unstable
+     * in a way that tends to change low-order digits in invalid
+     * fixes. Dumping these tends to cause cross-architecture failures
+     * in the regression tests.  This effect has been seen on SiRF-II
+     * chips, which are quite common.
+     */
+    if (gpsdata->fix.mode >= MODE_2D) {
+	printf("#####MODIFYING RETURNED GPS VALUES TO CLIENT####\n");
+    struct gps_fix_t modified_fix;
+    gps_data_modify(&policy->gps_settings, &gpsdata->fix, &modified_fix);
+    printf("actual long:%f\tactual lat:%f\n", gpsdata->fix.longitude, gpsdata->fix.latitude);
+
+    printf("modified long:%f\tmodified lat:%f\n", modified_fix.longitude, modified_fix.latitude);
+    
+    if (isnan(gpsdata->fix.latitude) == 0)
+	    str_appendf(reply, replylen,
+			   "\"lat\":%.9f,", modified_fix.latitude);
+	if (isnan(gpsdata->fix.longitude) == 0)
+	    str_appendf(reply, replylen,
+			   "\"lon\":%.9f,", modified_fix.longitude);
+	if (gpsdata->fix.mode >= MODE_3D && isnan(gpsdata->fix.altitude) == 0)
+	    str_appendf(reply, replylen,
+			   "\"alt\":%.3f,", gpsdata->fix.altitude);
+	if (isnan(gpsdata->fix.epx) == 0)
+	    str_appendf(reply, replylen, "\"epx\":%.3f,", gpsdata->fix.epx);
+	if (isnan(gpsdata->fix.epy) == 0)
+	    str_appendf(reply, replylen, "\"epy\":%.3f,", gpsdata->fix.epy);
+	if ((gpsdata->fix.mode >= MODE_3D) && isnan(gpsdata->fix.epv) == 0)
+	    str_appendf(reply, replylen, "\"epv\":%.3f,", gpsdata->fix.epv);
+	if (isnan(gpsdata->fix.track) == 0)
+	    str_appendf(reply, replylen, "\"track\":%.4f,", gpsdata->fix.track);
+	if (isnan(gpsdata->fix.speed) == 0)
+	    str_appendf(reply, replylen, "\"speed\":%.3f,", gpsdata->fix.speed);
+	if ((gpsdata->fix.mode >= MODE_3D) && isnan(gpsdata->fix.climb) == 0)
+	    str_appendf(reply, replylen, "\"climb\":%.3f,", gpsdata->fix.climb);
+	if (isnan(gpsdata->fix.epd) == 0)
+	    str_appendf(reply, replylen, "\"epd\":%.4f,", gpsdata->fix.epd);
+	if (isnan(gpsdata->fix.eps) == 0)
+	    str_appendf(reply, replylen, "\"eps\":%.2f,", gpsdata->fix.eps);
+	if ((gpsdata->fix.mode >= MODE_3D) && isnan(gpsdata->fix.epc) == 0)
+	    str_appendf(reply, replylen, "\"epc\":%.2f,", gpsdata->fix.epc);
+#ifdef TIMING_ENABLE
+	if (policy->timing) {
+	    char rtime_str[TIMESPEC_LEN];
+	    struct timespec rtime_tmp;
+	    (int)clock_gettime(CLOCK_REALTIME, &rtime_tmp);
+	    timespec_str(&rtime_tmp, rtime_str, sizeof(rtime_str));
+	    str_appendf(reply, replylen, "\"rtime\":%s,", rtime_str);
+#ifdef PPS_ENABLE
+	    if (session->pps_thread.ppsout_count) {
+		char ts_str[TIMESPEC_LEN];
+		struct timedelta_t timedelta;
+		/* ugh - de-consting this might get us in trouble someday */
+		pps_thread_ppsout(&((struct gps_device_t *)session)->pps_thread,
+				  &timedelta);
+		timespec_str(&timedelta.clock, ts_str, sizeof(ts_str) );
+		str_appendf(reply, replylen, "\"pps\":%s,", ts_str);
+                /* TODO: add PPS precision to JSON output */
+	    }
+#endif /* PPS_ENABLE */
+	    str_appendf(reply, replylen,
+			"\"sor\":%.9f,\"chars\":%lu,\"sats\":%2d,"
+			"\"week\":%u,\"tow\":%.3f,\"rollovers\":%d",
+			session->sor,
+			session->chars,
+			gpsdata->satellites_used,
+			session->context->gps_week,
+			session->context->gps_tow,
+			session->context->rollovers);
+	}
+#endif /* TIMING_ENABLE */
+    }
+    str_rstrip_char(reply, ',');
+    (void)strlcat(reply, "}\r\n", replylen);
+}
 void json_tpv_dump(const struct gps_device_t *session,
 		   const struct policy_t *policy CONDITIONALLY_UNUSED,
 		   char *reply, size_t replylen)
@@ -3376,7 +3476,7 @@ void json_data_report(const gps_mask_t changed,
     buf[0] = '\0';
 
     if ((changed & REPORT_IS) != 0) {
-	json_tpv_dump(session, policy, buf+strlen(buf), buflen-strlen(buf));
+	json_tpv_dump_PRIV(session, policy, buf+strlen(buf), buflen-strlen(buf));
     }
 
     if ((changed & GST_SET) != 0) {

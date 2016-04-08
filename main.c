@@ -43,15 +43,17 @@ int main(){
     gps.longitude = 0;
     gps.latitude = 0;
     printf("###TESTING EPSILON RADIUS EPSILON#####\n");
+    
+    for (int i = 0; i < 100; i++){
+    
     printf("ACTUAL: longitude=%f\tlatitude=%f\n", gps.longitude, gps.latitude);
     gps_data_modify(&(app1.gps_setting),&gps, &gps_priv);
     printf("PRIVATIZED: longitude=%f\tlatitude=%f\n", gps_priv.longitude, gps_priv.latitude);
     
-    gps_data_modify(&(app1.gps_setting),&gps, &gps_priv);
-    printf("longitude: %f\t" ,gps_priv.longitude);
-    printf("latitude: %f\n" ,gps_priv.latitude);
+    }
 
 
+    /*
     printf("#####TESTING TIME DIFFERENCE\n###");
     timeval_t currtime, prev_time;
     gettimeofday(&prev_time, NULL);
@@ -64,6 +66,7 @@ int main(){
         printf("timediff #%d: %ld\n", i, timediff);
         sleep(i);
     }
-    
+    */
+
 
 }
