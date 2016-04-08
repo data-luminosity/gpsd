@@ -1,0 +1,132 @@
+scons: Reading SConscript files ...
+Checking if compiler accepts -Wextra ...(cached) yes
+Checking if compiler accepts -Wall ...(cached) yes
+Checking if compiler accepts -Wno-uninitialized ...(cached) yes
+Checking if compiler accepts -Wno-missing-field-initializers ...(cached) yes
+Checking if compiler accepts -Wcast-align ...(cached) yes
+Checking if compiler accepts -Wmissing-declarations ...(cached) yes
+Checking if compiler accepts -Wstrict-prototypes ...(cached) yes
+Checking if compiler accepts -Wpointer-arith ...(cached) yes
+Checking if compiler accepts -Wreturn-type ...(cached) yes
+Checking if compiler accepts -pthread ...(cached) yes
+Checking whether the C++ compiler works... (cached) yes
+Checking for ncurses... (cached) yes
+Checking for libusb-1.0... (cached) yes
+Checking for C library librt... (cached) yes
+Checking for dbus-1... (cached) yes
+Checking for bluez... (cached) yes
+Checking for C type in_port_t... (cached) yes
+Checking whether SUN_LEN is declared... (cached) yes
+Checking for C header file linux/can.h... (cached) yes
+You have kernel CANbus available.
+Checking if compiler is C11 ...(cached) yes
+Checking if compiler supplies __STDC_NO_ATOMICS__ ...(cached) no
+Checking for C header file stdatomic.h... (cached) yes
+Checking if compiler supplies __ORDER_BIG_ENDIAN__ ...(cached) yes
+Checking if compiler supplies __ORDER_LITTLE_ENDIAN__ ...(cached) yes
+Checking if compiler supplies __BYTE_ORDER__ ...(cached) yes
+Your compiler has built-in endianness support.
+Checking for C function daemon()... (cached) yes
+Checking for C function strlcpy()... (cached) no
+Checking for C function strlcat()... (cached) no
+Checking for C function clock_gettime()... (cached) yes
+Checking for C library libbluetooth... (cached) yes
+Checking for C library libdbus-1... (cached) yes
+Checking for C header file sys/timepps.h... (cached) no
+Checking if sys/ioctl.h supplies TIOCMIWAIT ...(cached) yes
+Checking that xsltproc can make man pages... (cached) yes
+Checking for QtNetwork... (cached) yes
+All configuration flags are defaulted.
+scons: done reading SConscript files.
+scons: Building targets ...
+gcc -o priv_handler.o -c -Wmissing-prototypes -Wextra -Wall -Wno-uninitialized -Wno-missing-field-initializers -Wcast-align -Wmissing-declarations -Wstrict-prototypes -Wpointer-arith -Wreturn-type -pthread -Wmissing-declarations -O2 -pthread -I/usr/include/dbus-1.0 -I/usr/lib/dbus-1.0/include -I/usr/include/libusb-1.0 priv_handler.c
+timebase_h(["timebase.h"], ["leapseconds.cache"])
+ar rc libgpsd.a app_entry.o priv_handler.o setting_manager.o bsd_base64.o crc24q.o gpsd_json.o geoid.o isgps.o libgpsd_core.o matrix.o net_dgpsip.o net_gnss_dispatch.o net_ntrip.o ppsthread.o packet.o pseudonmea.o pseudoais.o serial.o subframe.o timebase.o timespec_str.o drivers.o driver_ais.o driver_evermore.o driver_garmin.o driver_garmin_txt.o driver_geostar.o driver_italk.o driver_navcom.o driver_nmea0183.o driver_nmea2000.o driver_oncore.o driver_rtcm2.o driver_rtcm3.o driver_sirf.o driver_superstar2.o driver_tsip.o driver_ubx.o driver_zodiac.o
+ranlib libgpsd.a
+gcc -o gpsd -pthread gpsd.o timehint.o shmexport.o dbusexport.o sd_socket.o -L. -lgpsd -lgps_static -lusb-1.0 -lbluetooth -lm -lrt -ldbus-1
+gcc -o gpsdecode -pthread gpsdecode.o -L. -lgpsd -lgps_static -lusb-1.0 -lbluetooth -lm -lrt -ldbus-1
+gcc -o gpsctl -pthread gpsctl.o -L. -lgpsd -lgps_static -lusb-1.0 -lbluetooth -lm -lrt -ldbus-1
+gcc -o gpsmon -pthread gpsmon.o monitor_italk.o monitor_nmea0183.o monitor_oncore.o monitor_sirf.o monitor_superstar2.o monitor_tnt.o monitor_ubx.o monitor_garmin.o -L. -lgpsd -lgps_static -lusb-1.0 -lbluetooth -lm -lrt -ldbus-1 -lncursesw
+scons: done building targets.
+###########SETTING MANAGER###############
+setting manager has 2 applications
+app #: 0	app id:0	type: 0	epoch: 10000	epsilon:100	
+app #: 1	app id:0	type: 0	epoch: 100	epsilon:100	
+###########SETTING MANAGER###############
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+###initializing a new connection with dummy id 0
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+###APP 0 is enabled!
+###settings manager found entry!
+type: 0	 epoch: 10000	 epsilon:100	####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+###APP 0 is enabled!
+###settings manager found entry!
+type: 0	 epoch: 10000	 epsilon:100	####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+###APP 0 is enabled!
+###settings manager found entry!
+type: 0	 epoch: 10000	 epsilon:100	prev time:0	curr time:1460143406
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+###APP 0 is enabled!
+###settings manager found entry!
+type: 0	 epoch: 10000	 epsilon:100	prev time:0	curr time:1460143411
+#####UPDATING TIME SINCE LAST UPDATE####
+past time was : 0	current time was : 1460143411
+#####MODIFYING RETURNED GPS VALUES TO CLIENT####
+actual long:-118.443007	actual lat:34.068888
+modified long:-74.950797	modified lat:60.703972
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+###APP 0 is enabled!
+###settings manager found entry!
+type: 0	 epoch: 10000	 epsilon:100	prev time:1460143411	curr time:1460143416
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+###APP 0 is enabled!
+###settings manager found entry!
+type: 0	 epoch: 10000	 epsilon:100	prev time:1460143411	curr time:1460143416
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+###APP 0 is enabled!
+###settings manager found entry!
+type: 0	 epoch: 10000	 epsilon:100	prev time:1460143411	curr time:1460143421
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+###APP 0 is enabled!
+###settings manager found entry!
+type: 0	 epoch: 10000	 epsilon:100	prev time:1460143411	curr time:1460143426
+#####UPDATING TIME SINCE LAST UPDATE####
+past time was : 1460143411	current time was : 1460143426
+#####MODIFYING RETURNED GPS VALUES TO CLIENT####
+actual long:-118.443007	actual lat:34.068888
+modified long:-111.891776	modified lat:52.965485
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+###APP 0 is enabled!
+###settings manager found entry!
+type: 0	 epoch: 10000	 epsilon:100	prev time:1460143426	curr time:1460143426
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+###APP 0 is enabled!
+###settings manager found entry!
+type: 0	 epoch: 10000	 epsilon:100	prev time:1460143426	curr time:1460143426
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+###APP 0 is enabled!
+###settings manager found entry!
+type: 0	 epoch: 10000	 epsilon:100	prev time:1460143426	curr time:1460143431
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+###APP 0 is enabled!
+###settings manager found entry!
+type: 0	 epoch: 10000	 epsilon:100	prev time:1460143426	curr time:1460143431
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+###APP 0 is enabled!
+###settings manager found entry!
+type: 0	 epoch: 10000	 epsilon:100	prev time:1460143426	curr time:1460143431
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+###APP 0 is enabled!
+###settings manager found entry!
+type: 0	 epoch: 10000	 epsilon:100	prev time:1460143426	curr time:1460143436
+#####UPDATING TIME SINCE LAST UPDATE####
+past time was : 1460143426	current time was : 1460143436
+#####MODIFYING RETURNED GPS VALUES TO CLIENT####
+actual long:-118.443007	actual lat:34.068888
+modified long:-141.136012	modified lat:90.690682
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+###APP 0 is enabled!
+###settings manager found entry!
+type: 0	 epoch: 10000	 epsilon:100	prev time:1460143436	curr time:1460143436

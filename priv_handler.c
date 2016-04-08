@@ -3,6 +3,7 @@
 #include <math.h>
 #include <string.h>
 #include "gps.h"
+#include <stdio.h>
 
 long timediffval(timeval_t* start, timeval_t* end){
     long end_ms = end->tv_sec*1000 + end->tv_usec/1000;
@@ -11,8 +12,11 @@ long timediffval(timeval_t* start, timeval_t* end){
 }
 
 bool gps_epoch_allow_update(long epoch, timeval_t* prev){
+
     timeval_t curr_time;
     gettimeofday(&curr_time, NULL);
+
+    printf("prev time:%ld\tcurr time:%ld\n", prev->tv_sec,curr_time.tv_sec);
     return timediffval(prev, &curr_time) > epoch;
 }
 

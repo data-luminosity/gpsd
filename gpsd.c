@@ -507,9 +507,16 @@ struct subscriber_t
     app_id_t id;
 };
 
+bool subscriber_t_allow_update(struct subscriber_t* s);
 void subscriber_t_init(struct subscriber_t* s);
 void subscriber_t_init_DUMMY(struct subscriber_t* s);
 void subscriber_t_dump(struct subscriber_t* s);
+
+bool subscriber_t_allow_update(struct subscriber_t* s){
+    long epoch = s->policy.gps_settings.epoch;
+    timeval_t last_update = s->policy.last_update_time;
+    return gps_epoch_allow_update(epoch, &last_update);
+}
 
 void subscriber_t_init(struct subscriber_t* s){
     printf("###initializing a new connextion###\n");
@@ -1322,12 +1329,16 @@ static void handle_request(struct subscriber_t *sub,
 	for (devp = devices; devp < devices + MAX_DEVICES; devp++) {
 	    if (allocated_device(devp) && subscribed(sub, devp)) {
 		if ((devp->observed & GPS_TYPEMASK) != 0) {
+            if (sub->enabled == 1 && subscriber_t_allow_update(sub) == 1) {
+
 		    json_tpv_dump_PRIV(devp, &sub->policy,
 				  reply + strlen(reply),
 				  replylen - strlen(reply));
 		    rstrip(reply);
 		    (void)strlcat(reply, ",", replylen);
-		}
+		
+            }
+        }
 	    }
 	}
 	str_rstrip_char(reply, ',');
@@ -1661,7 +1672,7 @@ static void all_reports(struct gps_device_t *device, gps_mask_t changed)
 		if (sub->policy.nmea)
 		    pseudonmea_report(sub, changed, device);
 
-		if (sub->policy.json)
+		if (sub->policy.json && subscriber_t_allow_update(sub))
 		{
 		    char buf[GPS_JSON_RESPONSE_MAX * 4];
 

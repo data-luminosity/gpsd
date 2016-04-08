@@ -10,7 +10,7 @@ int main(){
     //creating some dummy app entries
     
     int eps1 = 100;
-    int epo1 = 10;
+    int epo1 = 10000;
    
 
     int eps2 = 100;
@@ -49,7 +49,7 @@ int main(){
     printf("ACTUAL: longitude=%f\tlatitude=%f\n", gps.longitude, gps.latitude);
     gps_data_modify(&(app1.gps_setting),&gps, &gps_priv);
     printf("PRIVATIZED: longitude=%f\tlatitude=%f\n", gps_priv.longitude, gps_priv.latitude);
-    
+    sleep(1); 
     }
 
 
