@@ -1156,6 +1156,10 @@ static void handle_request(struct subscriber_t *sub,
                 gpsd_log(&context.errout, LOG_ERROR, "response: %s\n", reply);
             }
             //TODO respond to client with a message maybe?
+            
+            //SANITY CHECK
+            printf("######NEW ID PASSED IN IS %d#####\n", sub->id);
+            sub->enabled = 1;
         }
 /////////////////
     }else if (str_starts_with(buf, "WATCH")
@@ -2317,7 +2321,7 @@ int main(int argc, char *argv[])
 					      strlen(announce));
 		    }
 		    //initializing a new client means initially it is NOT enabled
-            //subscriber_t_init(client);
+            subscriber_t_init(client);
             //subscriber_t_init_DUMMY(client);
         }
 		FD_CLR(msocks[i], &rfds);

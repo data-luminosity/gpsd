@@ -13,8 +13,8 @@ int main(){
     int epo1 = 10000;
    
 
-    int eps2 = 100;
-    int epo2 = 100;
+    int eps2 = 10;
+    int epo2 = 10;
 
     gps_priv_t gps1, gps2;
     gps_priv_new(&gps1, 0, epo1, eps1);
