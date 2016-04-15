@@ -152,3 +152,5 @@ libQgpsmm/binaries/*
 nohup.out
 *.bak
 tmp*
+
+.DS_Store
