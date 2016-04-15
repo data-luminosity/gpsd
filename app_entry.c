@@ -10,6 +10,8 @@ gps_priv_t* gps_priv_new(gps_priv_t* gps, int t, long epo, int eps){
     gps->type = t;
     gps->epoch = epo;
     gps->epsilon = eps;
+    gps->flipone = GPS_FLIPONE_DEFAULT;
+    gps->fliptwo = GPS_FLIPTWO_DEFAULT;
 
     return gps;
 }
@@ -20,6 +22,8 @@ gps_priv_t* gps_priv_newDefault(gps_priv_t* gps){
     gps->type = GPS_TYPE_DEFAULT;
     gps->epoch = GPS_EPOCH_DEFAULT;
     gps->epsilon = GPS_TYPE_DEFAULT;
+    gps->flipone = GPS_FLIPONE_DEFAULT;
+    gps->fliptwo = GPS_FLIPTWO_DEFAULT;
 
     return gps;
 }
@@ -29,6 +33,8 @@ gps_priv_t* gps_priv_copy(gps_priv_t* src, gps_priv_t* dest){
     dest->type = src->type;
     dest->epoch = src->epoch;
     dest->epsilon = src->epsilon;
+    dest->flipone = src->flipone;
+    dest->fliptwo = src->fliptwo;
     return src;
 }
 

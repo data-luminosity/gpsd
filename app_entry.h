@@ -7,6 +7,8 @@
 #define GPS_EPOCH_DEFAULT 0
 #define GPS_EPSILON_DEFAULT 0
 #define GPS_TYPE_DEFAULT 0
+#define GPS_FLIPONE_DEFAULT 0.5
+#define GPS_FLIPTWO_DEFAULT 0.5
 
 /*
  *gps_priv is just settings of an app for gps
@@ -16,6 +18,8 @@ typedef struct gps_priv{
     int type;
     long epoch;
     int epsilon;
+    double flipone;
+    double fliptwo;
 } gps_priv_t;
 
 
