@@ -74,6 +74,21 @@ int json_device_read(const char *buf,
     return 0;
 }
 
+
+int json_appid_read(const char *buf,
+		    int *id,
+		    const char **endptr)
+{
+
+    struct json_attr_t json_id[] = {
+    {"id", t_integer, .addr.integer = id, .len = sizeof(int)},
+    {NULL},
+    };
+
+    int status = json_read_object(buf, &json_id, endptr);
+    return status;
+}
+
 int json_watch_read(const char *buf,
 		    struct policy_t *ccp,
 		    const char **endptr)

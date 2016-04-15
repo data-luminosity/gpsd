@@ -1126,12 +1126,44 @@ static void handle_request(struct subscriber_t *sub,
     if (str_starts_with(buf, "DEVICES;")) {
 	buf += 8;
 	json_devicelist_dump(reply, replylen);
-    } else if (str_starts_with(buf, "WATCH")
-	       && (buf[5] == ';' || buf[5] == '=')) {
-	const char *start = buf;
-	buf += 5;
-	if (*buf == ';') {
-	    ++buf;
+    }
+/////////////////
+    //NEW COMMAND TO PASS IN APP ID
+    else if (str_starts_with(buf, "APPID")
+            && (buf[5] == ';' || buf[5] == '=')) {
+        const char* start = buf;
+        buf +=5;
+
+        if (*buf == ';') {
+            ++buf;
+        } else { 
+            printf("#######ATTTEMPTING TO PASS IN APP ID######\n");
+            int status = json_appid_read(buf + 1, &(sub->id), NULL);
+#ifndef TIMING_ENABLE
+            sub->policy.timing = false;
+#endif /* TIMING_ENABLE */
+            if (end == NULL)
+                buf += strlen(buf);
+            else {
+                if (*end == ';')
+                    ++end;
+                buf = end;
+            }
+            if (status != 0) {
+                (void)snprintf(reply, replylen,
+                        "{\"class\":\"ERROR\",\"message\":\"Invalid APPID: %s\"}\r\n",
+                        json_error_string(status));
+                gpsd_log(&context.errout, LOG_ERROR, "response: %s\n", reply);
+            }
+            //TODO respond to client with a message maybe?
+        }
+/////////////////
+    }else if (str_starts_with(buf, "WATCH")
+                && (buf[5] == ';' || buf[5] == '=')) {
+            const char *start = buf;
+            buf += 5;
+            if (*buf == ';') {
+                ++buf;
 	} else { 
 	    int status = json_watch_read(buf + 1, &sub->policy, &end);
 #ifndef TIMING_ENABLE
@@ -1330,7 +1362,6 @@ static void handle_request(struct subscriber_t *sub,
 	    if (allocated_device(devp) && subscribed(sub, devp)) {
 		if ((devp->observed & GPS_TYPEMASK) != 0) {
             if (sub->enabled == 1 && subscriber_t_allow_update(sub) == 1) {
-
 		    json_tpv_dump_PRIV(devp, &sub->policy,
 				  reply + strlen(reply),
 				  replylen - strlen(reply));
@@ -1675,6 +1706,7 @@ static void all_reports(struct gps_device_t *device, gps_mask_t changed)
 		if (sub->policy.json && subscriber_t_allow_update(sub))
 		{
 		    char buf[GPS_JSON_RESPONSE_MAX * 4];
+
 
 		    if ((changed & AIS_SET) != 0)
 			if (device->gpsdata.ais.type == 24
@@ -2286,7 +2318,7 @@ int main(int argc, char *argv[])
 		    }
 		    //initializing a new client means initially it is NOT enabled
             //subscriber_t_init(client);
-            subscriber_t_init_DUMMY(client);
+            //subscriber_t_init_DUMMY(client);
         }
 		FD_CLR(msocks[i], &rfds);
 	    }

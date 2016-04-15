@@ -778,8 +778,12 @@ int main(int argc, char *argv[])
 	flags |= WATCH_DEVICE;
     (void)gps_stream(&gpsdata, flags, source.device);
 
+    ////CLIENT PASSSING IN ID??///
+    gps_pass_appid(&gpsdata, 3, source.device); 
+
+
     /* heart of the client */
-    for (;;) {
+    for (;1==0;) {
 	int c;
 
         /* wait 1/2 second for gpsd */

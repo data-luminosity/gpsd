@@ -260,6 +260,29 @@ int gps_sock_send(struct gps_data_t *gpsdata, const char *buf)
     }
 #endif
 }
+///appid sock passing
+int gps_sock_pass_appid(struct gps_data_t *gpsdata, int id , void *d){
+    char buf[GPS_JSON_COMMAND_MAX];
+    memset(buf, 0, GPS_JSON_COMMAND_MAX);
+    /*
+    sprintf(buf, "?APPID={\"id\":%d}", id); 
+    */
+    //above doesnt work since internal json parser
+    //uses a memcopy so it expects the int value in bytes
+    //not a string of the int
+   
+    char beg[14]="?APPID={\"id\":";
+    strcpy(buf, beg);
+    memcpy(buf+strlen(beg), &id, sizeof(int));//copying raw bytes of id into buffer
+    strcpy(buf+strlen(beg)+sizeof(int), "}");
+    //PRINT OUT 
+    printf("RAW BUFFER DUMP FOR PASS_ID ");
+    printf(buf);
+
+    return gps_send(gpsdata, buf);
+}
+
+
 
 int gps_sock_stream(struct gps_data_t *gpsdata, unsigned int flags, void *d)
 /* ask gpsd to stream reports at you, hiding the command details */

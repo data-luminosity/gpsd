@@ -2057,6 +2057,9 @@ extern int gps_read(struct gps_data_t *);
 extern int gps_unpack(char *, struct gps_data_t *);
 extern bool gps_waiting(const struct gps_data_t *, int);
 extern int gps_stream(struct gps_data_t *, unsigned int, void *);
+///PASSING IN ID//
+extern int gps_pass_appid(struct gps_data_t *,  int, void *);//TODO right now type is int for id
+/////////////////
 extern int gps_mainloop(struct gps_data_t *, int,
 			void (*)(struct gps_data_t *));
 extern const char *gps_data(const struct gps_data_t *);

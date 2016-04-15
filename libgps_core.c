@@ -195,6 +195,19 @@ int gps_stream(struct gps_data_t *gpsdata CONDITIONALLY_UNUSED,
     return status;
 }
 
+int gps_pass_appid(struct gps_data_t *gpsdata CONDITIONALLY_UNUSED, 
+        int id,
+        void* d CONDITIONALLY_UNUSED){
+    int status = -1;
+#ifdef SOCKET_EXPORT_ENABLE
+    /* cppcheck-suppress redundantAssignment */
+    status = gps_sock_pass_appid(gpsdata, id, d);
+#endif /* SOCKET_EXPORT_ENABLE */
+
+    return status;
+}
+
+
 const char *gps_data(const struct gps_data_t *gpsdata CONDITIONALLY_UNUSED)
 /* return the contents of the client data buffer */
 {

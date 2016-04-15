@@ -22,6 +22,10 @@ extern int gps_sock_send(struct gps_data_t *, const char *);
 extern int gps_sock_read(struct gps_data_t *);
 extern bool gps_sock_waiting(const struct gps_data_t *, int);
 extern int gps_sock_stream(struct gps_data_t *, unsigned int, void *);
+
+//SOCKET INTERFACE FOR PASSING IN ID//
+extern int gps_sock_pass_appid(struct gps_data_t *, int, void *);//TODO again, int is of type app_id_t
+
 extern const char *gps_sock_data(const struct gps_data_t *);
 extern int gps_sock_mainloop(struct gps_data_t *, int,
 			      void (*)(struct gps_data_t *));

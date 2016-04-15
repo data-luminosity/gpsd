@@ -32,6 +32,11 @@ void json_device_dump(const struct gps_device_t *, char *, size_t);
 void json_watch_dump(const struct policy_t *, char *, size_t);
 int json_watch_read(const char *, struct policy_t *,
 		    const char **);
+
+////
+int json_appid_read(const char *, int*,
+		    const char **);//TODO TYPEDEF for int?
+////
 int json_device_read(const char *, struct devconfig_t *,
 		     const char **);
 void json_version_dump(char *, size_t);
