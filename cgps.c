@@ -779,7 +779,7 @@ int main(int argc, char *argv[])
     (void)gps_stream(&gpsdata, flags, source.device);
 
     ////CLIENT PASSSING IN ID??///
-    gps_pass_appid(&gpsdata, 0, source.device); 
+    gps_pass_appid(&gpsdata, 1, source.device); 
 
 
     /* heart of the client */

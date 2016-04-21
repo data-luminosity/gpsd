@@ -22,7 +22,7 @@ int main(){
    
     app_entry_t app1,app2;
     app_entry_new(&app1, 0, &gps1);
-    app_entry_new(&app2, 0, &gps2);
+    app_entry_new(&app2, 1, &gps2);
 
     //manually creating app entries
     setting_manager_t sm;

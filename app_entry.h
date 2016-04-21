@@ -10,6 +10,8 @@
 #define GPS_FLIPONE_DEFAULT 0.5
 #define GPS_FLIPTWO_DEFAULT 0.5
 
+
+typedef long epsilon_t;
 /*
  *gps_priv is just settings of an app for gps
  *clear definition of a type, epoch, and epsilon
@@ -17,13 +19,13 @@
 typedef struct gps_priv{
     int type;
     long epoch;
-    int epsilon;
+    epsilon_t epsilon;
     double flipone;
     double fliptwo;
 } gps_priv_t;
 
 
-gps_priv_t* gps_priv_new(gps_priv_t*, int t, long epo, int eps);
+gps_priv_t* gps_priv_new(gps_priv_t*, int t, long epo, epsilon_t eps);
 gps_priv_t* gps_priv_newDefault(gps_priv_t*);
 gps_priv_t* gps_priv_copy(gps_priv_t* src, gps_priv_t* dest);
 void gps_priv_dump(gps_priv_t*);

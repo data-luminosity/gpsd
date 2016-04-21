@@ -160,18 +160,20 @@ void json_tpv_dump_PRIV(const struct gps_device_t *session,
     printf("current time was : %ld\n", policy->last_update_time.tv_sec);
     
     printf("#####MODIFYING RETURNED GPS VALUES TO CLIENT####\n");
-    struct gps_fix_t modified_fix;
-    gps_data_modify(&policy->gps_settings, &gpsdata->fix, &modified_fix);
-    printf("actual long:%f\tactual lat:%f\n", gpsdata->fix.longitude, gpsdata->fix.latitude);
-
-    printf("modified long:%f\tmodified lat:%f\n", modified_fix.longitude, modified_fix.latitude);
-    
-    if (isnan(gpsdata->fix.latitude) == 0)
-	    str_appendf(reply, replylen,
-			   "\"lat\":%.9f,", modified_fix.latitude);
-	if (isnan(gpsdata->fix.longitude) == 0)
-	    str_appendf(reply, replylen,
-			   "\"lon\":%.9f,", modified_fix.longitude);
+    location_t actual = {gpsdata->fix.longitude, gpsdata->fix.latitude};
+    location_t modified[MAX_LOC_VALS];
+    int n_locs = 0;
+    if (!gps_data_modify(&policy->gps_settings, &actual, &modified, &n_locs)){
+        printf("SOMETHING WENT WRONG\n");
+    }
+    for (int i = 0 ; i < n_locs; i++){
+        if (isnan(gpsdata->fix.latitude) == 0)
+	        str_appendf(reply, replylen,
+			   "\"lat\":%.9f,", modified[i].latitude);
+	    if (isnan(gpsdata->fix.longitude) == 0)
+	        str_appendf(reply, replylen,
+			   "\"lon\":%.9f,", modified[i].longitude);
+    }
 	if (gpsdata->fix.mode >= MODE_3D && isnan(gpsdata->fix.altitude) == 0)
 	    str_appendf(reply, replylen,
 			   "\"alt\":%.3f,", gpsdata->fix.altitude);
