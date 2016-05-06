@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS= -g -O2
+CFLAGS= -g
 OBJECTS = app_entry.o setting_manager.o priv_handler.o main.o
 
 

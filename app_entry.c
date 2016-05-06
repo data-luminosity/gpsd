@@ -4,7 +4,7 @@
 
 
 //GPS_PRIV
-gps_priv_t* gps_priv_new(gps_priv_t* gps, int t, long epo, epsilon_t eps){
+gps_priv_t* gps_priv_new(gps_priv_t* gps, int t, epoch_t epo, epsilon_t eps){
     if (gps == NULL)
         return NULL;
     gps->type = t;
@@ -39,7 +39,7 @@ gps_priv_t* gps_priv_copy(gps_priv_t* src, gps_priv_t* dest){
 }
 
 void gps_priv_dump(gps_priv_t* gps){
-    printf("type: %d\t epoch: %ld\t epsilon:%f\t", gps->type, gps->epoch, gps->epsilon);
+    printf("type: %d\t epoch: %f\t epsilon:%f\t", gps->type, gps->epoch, gps->epsilon);
 }
 
 ///APP ENTRY

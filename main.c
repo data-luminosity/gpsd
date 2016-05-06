@@ -8,14 +8,14 @@
 
 int main(){
     //creating some dummy app entries
-    
+    /*
     int eps1 = 100;
     int epo1 = 10000;
    
 
     int eps2 = 10;
     int epo2 = 10;
-
+    
     gps_priv_t gps1, gps2;
     gps_priv_new(&gps1, 0, epo1, eps1);
     gps_priv_new(&gps2, 0, epo2, eps2);
@@ -31,6 +31,8 @@ int main(){
     sm.apps[0] = app1;
     sm.apps[1] = app2;
 
+
+    setting_manager_dump(&sm);
     assert(setting_manager_save_gps( &sm,setting_name));
     
     //loading up a new sm
@@ -38,7 +40,9 @@ int main(){
     assert(setting_manager_load_gps(&sm2, setting_name));
     printf("setting_manger count: %d\n", sm2.n_apps);
 
-     
+    setting_manager_dump(&sm2);
+    */
+    /* 
     struct gps_fix_t gps, gps_priv;
     gps.longitude = 0;
     gps.latitude = 0;
@@ -51,8 +55,40 @@ int main(){
     printf("PRIVATIZED: longitude=%f\tlatitude=%f\n", gps_priv.longitude, gps_priv.latitude);
     sleep(1); 
     }
+   
+    */
 
+    
+    //manually creating app entries
+    setting_manager_t sm;
+    char* setting_name = "SETTINGS.txt";
+    sm.n_apps = 100;
+    
+    //adding a bunch of dummy privacy entry
+    long epo = 1;
+    float eps = 1;    
+    
+    gps_priv_t gps;
+    app_entry_t app;
+    for (int i = 0; i < 100; i++){
+        gps_priv_new(&gps, 0, epo, eps);
+        app_entry_new(&app, i, &gps);
+        sm.apps[i] = app;
+            
 
+        epo += 1;
+        eps += 1;
+    }
+
+    setting_manager_dump(&sm);    
+    assert(setting_manager_save_gps(&sm, setting_name));
+        
+    //loading up a new sm
+    setting_manager_t sm2;
+    assert(setting_manager_load_gps(&sm2, setting_name));
+
+    setting_manager_dump(&sm2);
+    
     /*
     printf("#####TESTING TIME DIFFERENCE\n###");
     timeval_t currtime, prev_time;

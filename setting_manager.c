@@ -99,7 +99,7 @@ void setting_manager_dump(setting_manager_t* sm){
         printf ("app #: %d\tapp id:%d\t",i, curr_app.app_id);
         gps_priv_t curr_gps = curr_app.gps_setting;
 
-        printf("type: %d\tepoch: %ld\tepsilon:%d\t\n",
+        printf("type: %d\t epoch: %ld\t epsilon:%ld\n",
                 curr_gps.type, curr_gps.epoch, curr_gps.epsilon);
     } 
     printf("###########SETTING MANAGER###############\n");
