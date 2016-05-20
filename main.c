@@ -7,58 +7,20 @@
 #include <unistd.h>
 
 int main(){
-    //creating some dummy app entries
-    /*
-    int eps1 = 100;
-    int epo1 = 10000;
-   
-
-    int eps2 = 10;
-    int epo2 = 10;
     
-    gps_priv_t gps1, gps2;
-    gps_priv_new(&gps1, 0, epo1, eps1);
-    gps_priv_new(&gps2, 0, epo2, eps2);
-   
-    app_entry_t app1,app2;
-    app_entry_new(&app1, 0, &gps1);
-    app_entry_new(&app2, 1, &gps2);
-
-    //manually creating app entries
-    setting_manager_t sm;
-    char* setting_name = "SETTINGS.txt";
-    sm.n_apps = 2;
-    sm.apps[0] = app1;
-    sm.apps[1] = app2;
-
-
-    setting_manager_dump(&sm);
-    assert(setting_manager_save_gps( &sm,setting_name));
-    
-    //loading up a new sm
-    setting_manager_t sm2;
-    assert(setting_manager_load_gps(&sm2, setting_name));
-    printf("setting_manger count: %d\n", sm2.n_apps);
-
-    setting_manager_dump(&sm2);
-    */
-    /* 
-    struct gps_fix_t gps, gps_priv;
-    gps.longitude = 0;
-    gps.latitude = 0;
-    printf("###TESTING EPSILON RADIUS EPSILON#####\n");
-    
-    for (int i = 0; i < 100; i++){
-    
-    printf("ACTUAL: longitude=%f\tlatitude=%f\n", gps.longitude, gps.latitude);
-    gps_data_modify(&(app1.gps_setting),&gps, &gps_priv);
-    printf("PRIVATIZED: longitude=%f\tlatitude=%f\n", gps_priv.longitude, gps_priv.latitude);
-    sleep(1); 
+    timeval_t prev_time;
+    gettimeofday(&prev_time, NULL);
+    printf("#####TESTING EPOCH DIFF#####\n");
+    while(1){
+        if (gps_epoch_allow_update(1000, &prev_time)){
+            printf("ALLOW!\n"); 
+            gettimeofday(&prev_time, NULL);
+        }
     }
-   
-    */
 
-    
+
+
+
     //manually creating app entries
     setting_manager_t sm;
     char* setting_name = "SETTINGS.txt";
@@ -79,7 +41,10 @@ int main(){
         epo += 1;
         eps += 1;
     }
-
+    
+    sm.apps[1].gps_setting.epoch = 10;
+    sm.apps[1].gps_setting.epsilon = 10;
+    
     setting_manager_dump(&sm);    
     assert(setting_manager_save_gps(&sm, setting_name));
         

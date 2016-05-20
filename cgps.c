@@ -666,6 +666,16 @@ long timediffval(timeval_t* start, timeval_t* end){
 }
 
 
+double act_lat = 34.0686259;
+double act_long =-118.4433499118;
+double tot_diff = 0;
+double tot_count = 0;
+
+double diff_squared(double lon, double lat){
+   return (act_lat - lat) * (act_lat- lat) + (act_long -lon)*(act_long - lon); 
+}
+
+
 void gps_dump(struct gps_data_t * data, timeval_t* prev_time){
     //printing out time since last update
     timeval_t cur_time;
@@ -679,6 +689,11 @@ void gps_dump(struct gps_data_t * data, timeval_t* prev_time){
             data->fix.longitude,
             data->fix.latitude
             );
+    //recomputing the variane
+    tot_diff += diff_squared(data->fix.longitude, data->fix.latitude); 
+    tot_count+=1;
+    printf("curr variance: %f\n", tot_diff/tot_count);
+
     //printing empty lines
     printf("####################\n");
 
@@ -698,7 +713,7 @@ int main(int argc, char *argv[])
     timeval_t curr_time;
     gettimeofday(&curr_time, NULL);
     
-    int app_id = 20; //atoi(argv[1]);
+    int app_id = 1; //atoi(argv[1]);
     printf("app id is %d\n", app_id);
     
 

@@ -519,7 +519,7 @@ bool subscriber_t_allow_update(struct subscriber_t* s){
 }
 
 void subscriber_t_init(struct subscriber_t* s){
-    printf("###initializing a new connextion###\n");
+    printf("###initializing a new conncction###\n");
     s->enabled = 0;
     gettimeofday(&(s->policy.last_update_time), NULL);
 }
@@ -1365,7 +1365,7 @@ static void handle_request(struct subscriber_t *sub,
 	for (devp = devices; devp < devices + MAX_DEVICES; devp++) {
 	    if (allocated_device(devp) && subscribed(sub, devp)) {
 		if ((devp->observed & GPS_TYPEMASK) != 0) {
-            if (sub->enabled == 1 && subscriber_t_allow_update(sub) == 1) {
+            if (sub->enabled == 1 && subscriber_t_allow_update(sub) == true) {
 		    json_tpv_dump_PRIV(devp, &sub->policy,
 				  reply + strlen(reply),
 				  replylen - strlen(reply));
@@ -2320,9 +2320,7 @@ int main(int argc, char *argv[])
 			(void)throttled_write(client, announce,
 					      strlen(announce));
 		    }
-		    //initializing a new client means initially it is NOT enabled
             subscriber_t_init(client);
-            //subscriber_t_init_DUMMY(client);
         }
 		FD_CLR(msocks[i], &rfds);
 	    }
@@ -2339,6 +2337,7 @@ int main(int argc, char *argv[])
             app_entry_t app;
             if (setting_manager_get_app_entry(&settings, subscribers[i].id, &app) == 0){
                 printf("###settings manager found entry!\n");
+                gps_priv_dump(&app.gps_setting);
                 gps_priv_copy(&app.gps_setting, &subscribers[i].policy.gps_settings);            
             }
             else{

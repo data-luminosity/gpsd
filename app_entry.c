@@ -39,7 +39,7 @@ gps_priv_t* gps_priv_copy(gps_priv_t* src, gps_priv_t* dest){
 }
 
 void gps_priv_dump(gps_priv_t* gps){
-    printf("type: %d\t epoch: %f\t epsilon:%f\t", gps->type, gps->epoch, gps->epsilon);
+    printf("type: %d\t epoch: %d\t epsilon:%d\t", gps->type, gps->epoch, gps->epsilon);
 }
 
 ///APP ENTRY

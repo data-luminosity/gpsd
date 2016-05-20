@@ -18,7 +18,7 @@ bool gps_epoch_allow_update(long epoch, timeval_t* prev){
     timeval_t curr_time;
     gettimeofday(&curr_time, NULL);
 
-    printf("prev time:%ld\tcurr time:%ld\n", prev->tv_sec,curr_time.tv_sec);
+    //printf("prev time:%ld\tcurr time:%ld\n", prev->tv_sec,curr_time.tv_sec);
     return timediffval(prev, &curr_time) > epoch;
 }
 
