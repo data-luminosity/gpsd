@@ -7,19 +7,16 @@
 #include <unistd.h>
 
 int main(){
-    
-    timeval_t prev_time;
-    gettimeofday(&prev_time, NULL);
-    printf("#####TESTING EPOCH DIFF#####\n");
-    while(1){
-        if (gps_epoch_allow_update(1000, &prev_time)){
-            printf("ALLOW!\n"); 
-            gettimeofday(&prev_time, NULL);
-        }
-    }
 
-
-
+    /*timeval_t prev_time;*/
+    /*gettimeofday(&prev_time, NULL);*/
+    /*printf("#####testing epoch diff#####\n");*/
+    /*while(1){*/
+        /*if (gps_epoch_allow_update(1000, &prev_time)){*/
+            /*printf("allow!\n"); */
+            /*gettimeofday(&prev_time, null);*/
+        /*}*/
+    /*}*/
 
     //manually creating app entries
     setting_manager_t sm;
@@ -27,8 +24,8 @@ int main(){
     sm.n_apps = 100;
     
     //adding a bunch of dummy privacy entry
-    long epo = 1;
-    float eps = 1;    
+    long epo = 10000;
+    double eps = 2;    
     
     gps_priv_t gps;
     app_entry_t app;
@@ -38,12 +35,9 @@ int main(){
         sm.apps[i] = app;
             
 
-        epo += 1;
+        epo += 100;
         eps += 1;
     }
-    
-    sm.apps[1].gps_setting.epoch = 10;
-    sm.apps[1].gps_setting.epsilon = 10;
     
     setting_manager_dump(&sm);    
     assert(setting_manager_save_gps(&sm, setting_name));
@@ -52,8 +46,10 @@ int main(){
     setting_manager_t sm2;
     assert(setting_manager_load_gps(&sm2, setting_name));
 
-    setting_manager_dump(&sm2);
-    
+    setting_manager_dump(&sm2);   
+
+
+
     /*
     printf("#####TESTING TIME DIFFERENCE\n###");
     timeval_t currtime, prev_time;

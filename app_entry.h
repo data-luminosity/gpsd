@@ -11,7 +11,7 @@
 #define GPS_FLIPTWO_DEFAULT 0.5
 
 typedef long epoch_t;
-typedef long epsilon_t;
+typedef float epsilon_t;
 /*
  *gps_priv is just settings of an app for gps
  *clear definition of a type, epoch, and epsilon

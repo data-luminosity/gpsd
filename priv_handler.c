@@ -35,6 +35,8 @@ bool gps_data_modify(gps_priv_t* settings, location_t* src,
     }
 }
 
+
+//RATIO
 bool gps_data_modifyRAD(epsilon_t eps, location_t* src, location_t* dest, int* n_locs){
     if (src == NULL || dest == NULL)
         return 1;
@@ -42,12 +44,14 @@ bool gps_data_modifyRAD(epsilon_t eps, location_t* src, location_t* dest, int* n
     srand((unsigned int) time(&t));
 
     //TODO not perfect distribution
-    double dist_var = (double)(rand() % eps);
+    double dist_var = (double)(rand()/((double)RAND_MAX) * eps);
     int angle_var = rand();
     
     *n_locs = 1;
+    printf("ORIGINAL LAT:%f\tLONG:%f\n", src->latitude, src->longitude);
     dest[0].longitude = src->longitude + sin((double)angle_var)*dist_var;
-    dest[1].latitude = src->latitude + cos((double)angle_var)*dist_var;
+    dest[0].latitude = src->latitude + cos((double)angle_var)*dist_var;
+
     return 1;
 }
 

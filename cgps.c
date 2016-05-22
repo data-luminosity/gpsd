@@ -665,14 +665,17 @@ long timediffval(timeval_t* start, timeval_t* end){
     return end_ms - start_ms;
 }
 
-
 double act_lat = 34.0686259;
 double act_long =-118.4433499118;
 double tot_diff = 0;
 double tot_count = 0;
 
 double diff_squared(double lon, double lat){
-   return (act_lat - lat) * (act_lat- lat) + (act_long -lon)*(act_long - lon); 
+   double diff_sq =  (act_lat - lat) * (act_lat- lat) + (act_long - lon)*(act_long - lon); 
+    printf("double squared%f\n", diff_sq);
+    if (diff_sq != diff_sq)
+        return 0;
+    return diff_sq;
 }
 
 
@@ -689,12 +692,13 @@ void gps_dump(struct gps_data_t * data, timeval_t* prev_time){
             data->fix.longitude,
             data->fix.latitude
             );
-    //recomputing the variane
+    //recomputing the variance
     tot_diff += diff_squared(data->fix.longitude, data->fix.latitude); 
     tot_count+=1;
-    printf("curr variance: %f\n", tot_diff/tot_count);
 
-    //printing empty lines
+
+    printf("TOT_DIFF: %f\tTOT_COUNT:%f\tCURR_VAR:%f\n",
+            tot_diff, tot_count, tot_diff/tot_count);
     printf("####################\n");
 
 }
