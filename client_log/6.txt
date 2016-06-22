@@ -1,0 +1,66 @@
+app id is 47
+RAW BUFFER DUMP FOR PASS_ID ?APPID={"id":47}last time:1466559739	current time:1466559739	time elapsed:0
+longitude:nan	latitudenan
+double squarednan
+TOT_DIFF: 0.000000	TOT_COUNT:1.000000	CURR_VAR:0.000000
+####################
+last time:1466559739	current time:1466559739	time elapsed:0
+longitude:nan	latitudenan
+double squarednan
+TOT_DIFF: 0.000000	TOT_COUNT:2.000000	CURR_VAR:0.000000
+####################
+last time:1466559739	current time:1466559739	time elapsed:0
+longitude:nan	latitudenan
+double squarednan
+TOT_DIFF: 0.000000	TOT_COUNT:3.000000	CURR_VAR:0.000000
+####################
+last time:1466559756	current time:1466559739	time elapsed:17
+longitude:-105.494647	latitude42.862987
+double squared245.009701
+TOT_DIFF: 245.009701	TOT_COUNT:4.000000	CURR_VAR:61.252425
+####################
+last time:1466559771	current time:1466559756	time elapsed:15
+longitude:-126.552844	latitude39.531383
+double squared95.605617
+TOT_DIFF: 340.615318	TOT_COUNT:5.000000	CURR_VAR:68.123064
+####################
+last time:1466559786	current time:1466559771	time elapsed:15
+longitude:-115.094387	latitude32.400102
+double squared13.999527
+TOT_DIFF: 354.614845	TOT_COUNT:6.000000	CURR_VAR:59.102474
+####################
+last time:1466559801	current time:1466559786	time elapsed:15
+longitude:-117.634681	latitude12.145862
+double squared481.261531
+TOT_DIFF: 835.876376	TOT_COUNT:7.000000	CURR_VAR:119.410911
+####################
+last time:1466559816	current time:1466559801	time elapsed:15
+longitude:-112.380035	latitude49.083462
+double squared262.209079
+TOT_DIFF: 1098.085456	TOT_COUNT:8.000000	CURR_VAR:137.260682
+####################
+last time:1466559831	current time:1466559816	time elapsed:15
+longitude:-91.566365	latitude55.285522
+double squared1172.529031
+TOT_DIFF: 2270.614486	TOT_COUNT:9.000000	CURR_VAR:252.290498
+####################
+last time:1466559846	current time:1466559831	time elapsed:15
+longitude:-146.563858	latitude35.948500
+double squared794.296900
+TOT_DIFF: 3064.911386	TOT_COUNT:10.000000	CURR_VAR:306.491139
+####################
+last time:1466559861	current time:1466559846	time elapsed:15
+longitude:-134.973059	latitude48.639177
+double squared485.532250
+TOT_DIFF: 3550.443636	TOT_COUNT:11.000000	CURR_VAR:322.767603
+####################
+last time:1466559876	current time:1466559861	time elapsed:15
+longitude:-119.235419	latitude18.045772
+double squared257.359221
+TOT_DIFF: 3807.802857	TOT_COUNT:12.000000	CURR_VAR:317.316905
+####################
+last time:1466559891	current time:1466559876	time elapsed:15
+longitude:-124.027624	latitude42.317748
+double squared99.232128
+TOT_DIFF: 3907.034985	TOT_COUNT:13.000000	CURR_VAR:300.541153
+####################

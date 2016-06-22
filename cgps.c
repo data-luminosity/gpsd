@@ -1,3 +1,6 @@
+#include <stdlib.h>
+#include <time.h>
+
 /*
  * Copyright (c) 2005 Jeff Francis <jeff@gritch.org>
  * BSD terms apply: see the filr COPYING in the distribution root for details.
@@ -716,8 +719,10 @@ int main(int argc, char *argv[])
     //getting time
     timeval_t curr_time;
     gettimeofday(&curr_time, NULL);
+   
     
-    int app_id = 1; //atoi(argv[1]);
+    srand(time(NULL));
+    int app_id = rand()%100; //atoi(argv[1]);
     printf("app id is %d\n", app_id);
     
 
