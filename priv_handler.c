@@ -29,7 +29,7 @@ bool gps_data_modify(gps_priv_t* settings, location_t* src,
     case (RADIUS_TYPE):
         return gps_data_modifyRAD(settings->epsilon, src, dest, n_locs);
     case(GRID_TYPE):
-        return gps_data_modifyGRID(settings->epsilon, src, dest, n_locs);
+        return gps_data_modifyGRID(settings->epsilon, src, dest, n_locs, settings->flipone, settings->fliptwo);
     default:
         return 1; //TODO not handled default case yet
     }
@@ -55,6 +55,6 @@ bool gps_data_modifyRAD(epsilon_t eps, location_t* src, location_t* dest, int* n
     return 1;
 }
 
-bool gps_data_modifyGRID(epsilon_t eps, location_t* src, location_t* dest, int* n_locs){
+bool gps_data_modifyGRID(epsilon_t eps, location_t* src, location_t* dest, int* n_locs, double flipone, double fliptwo){
     return 1;
 }

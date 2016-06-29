@@ -30,5 +30,5 @@ typedef struct location{
 bool gps_epoch_allow_update(long epoch, timeval_t* prev);
 bool gps_data_modify(gps_priv_t*, location_t* src, location_t* dest, int* n_locs);
 bool gps_data_modifyRAD(epsilon_t, location_t* src, location_t* dest, int* n_locs);
-bool gps_data_modifyGRID(epsilon_t, location_t* src, location_t* dest, int* n_locs);
+bool gps_data_modifyGRID(epsilon_t, location_t* src, location_t* dest, int* n_locs, double flipone, double fliptwo);
 #endif
