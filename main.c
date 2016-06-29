@@ -1,10 +1,12 @@
 #include "app_entry.h"
 #include "setting_manager.h"
 #include "priv_handler.h"
+#include "coordinate_calculations.h"
 #include <stdio.h>
 #include <assert.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 int main(){
 
@@ -49,6 +51,13 @@ int main(){
     setting_manager_dump(&sm2);   
 
 
+    double distance=GreatCircleDistanceInMeters(-118.479024,34.012653,-118.482393,34.015250);
+    printf("Distance=%f\n",distance);
+
+    srand (time(NULL));
+    //int random_number=(int)(100.0 * rand() / (RAND_MAX + 1.0)) + 1;
+    int random_number=(int)(rand() % 100 + 1);
+    printf("Random Number=%d\n",random_number);
 
     /*
     printf("#####TESTING TIME DIFFERENCE\n###");

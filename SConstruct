@@ -852,6 +852,7 @@ if env['libgpsmm']:
 
 libgpsd_sources = [
     "app_entry.c",
+    "coordinate_calculations.c",
     "priv_handler.c",
     "setting_manager.c",
     

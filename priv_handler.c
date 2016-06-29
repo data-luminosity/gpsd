@@ -55,6 +55,56 @@ bool gps_data_modifyRAD(epsilon_t eps, location_t* src, location_t* dest, int* n
     return 1;
 }
 
+bool flip(double probability) {
+    int random_number=(int)(rand() % 100 + 1);
+    int weight=(int)(100*probability);
+    if(random_number<=weight) {
+        return 1;
+    }
+    return 0;
+}
+
+
 bool gps_data_modifyGRID(epsilon_t eps, location_t* src, location_t* dest, int* n_locs, double flipone, double fliptwo){
+    /*** to be replaced by bounding box partitioned into sub regions ***/
+    int radius_meters=45;
+    int regions_count=3;
+    location_t regions[regions_count];
+    regions[0].longitude=-118.482393;
+    regions[0].latitude=34.015250;
+    /*** Boelter Hall **/
+    regions[1].longitude=-118.443084;
+    regions[1].latitude=34.069439;
+    /*** Wooden Center ***/
+    regions[2].longitude=-118.445301;
+    regions[2].latitude=34.071356;
+
+    int destination_counter=0;
+    for(int x=0;x<regions_count;x++) {
+        double distance=GreatCircleDistanceInMeters(src->longitude,src->latitude,regions[x].longitude,regions[x].latitude);
+        bool flipone=flip(flipone);
+        bool fliptwo=flip(fliptwo);
+        bool ismatched=0;
+        if(distance<=radius_meters) {
+            ismatched=1;
+        }
+        if(flipone) {
+            //answer truthfully
+        }
+        else if(fliptwo) {
+            ismatched=1;
+        }
+        else {
+            ismatched=0;
+        }
+
+        if(ismatched) {
+            dest[destination_counter].longitude = regions[x].longitude;
+            dest[destination_counter].latitude = regions[x].latitude;
+            destination_counter++;
+        }
+    }
+
+
     return 1;
 }
