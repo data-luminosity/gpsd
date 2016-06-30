@@ -1,0 +1,58 @@
+app id is 80
+RAW BUFFER DUMP FOR PASS_ID ?APPID={"id":80}last time:1466551070	current time:1466551070	time elapsed:0
+longitude:nan	latitudenan
+double squarednan
+TOT_DIFF: 0.000000	TOT_COUNT:1.000000	CURR_VAR:0.000000
+####################
+last time:1466551070	current time:1466551070	time elapsed:0
+longitude:nan	latitudenan
+double squarednan
+TOT_DIFF: 0.000000	TOT_COUNT:2.000000	CURR_VAR:0.000000
+####################
+last time:1466551070	current time:1466551070	time elapsed:0
+longitude:nan	latitudenan
+double squarednan
+TOT_DIFF: 0.000000	TOT_COUNT:3.000000	CURR_VAR:0.000000
+####################
+[?1049h[1;65r[m(B[4l[?7h[H[2J[65;1H[r[?1049l>[?1049h[1;31r[m(B[4l[?7h[H[2J[m(0lqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqk(B
+[m(0x(B    Time:[2;45H[m(0x(B
+[m(0x(B    Latitude:[3;45H[m(0x(B
+[m(0x(B    Longitude:[4;45H[m(0x(B
+[m(0x(B    Altitude:[5;45H[m(0x(B
+[m(0x(B    Speed:[6;45H[m(0x(B
+[m(0x(B    Heading:[7;45H[m(0x(B
+[m(0x(B    Climb:[8;45H[m(0x(B
+[m(0x(B    Status:[9;45H[m(0x(B
+[m(0x(B    Longitude Err:[10;45H[m(0x(B
+[m(0x(B    Latitude Err:[11;45H[m(0x(B
+[m(0x(B    Altitude Err:[12;45H[m(0x(B
+[m(0x(B    Course Err:[13;45H[m(0x(B
+[m(0x(B    Speed Err:[14;45H[m(0x(B
+[m(0x(B    Time offset:[15;45H[m(0x(B
+[m(0x(B    Grid Square:[16;45H[m(0x(B
+[m(0mqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqj(B[16;18H[m(0(B[31;1H[r[?1049l>last time:1466551096	current time:1466551070	time elapsed:26
+longitude:-91.291611	latitude-21.553352
+double squared3831.021422
+TOT_DIFF: 3831.021422	TOT_COUNT:4.000000	CURR_VAR:957.755355
+####################
+last time:1466551117	current time:1466551096	time elapsed:21
+longitude:-131.209112	latitude53.308722
+double squared533.145982
+TOT_DIFF: 4364.167403	TOT_COUNT:5.000000	CURR_VAR:872.833481
+####################
+last time:1466551137	current time:1466551117	time elapsed:20
+longitude:-63.179164	latitude-20.881849
+double squared6073.685001
+TOT_DIFF: 10437.852404	TOT_COUNT:6.000000	CURR_VAR:1739.642067
+####################
+last time:1466551157	current time:1466551137	time elapsed:20
+longitude:-167.250656	latitude22.338254
+double squared2519.754761
+TOT_DIFF: 12957.607165	TOT_COUNT:7.000000	CURR_VAR:1851.086738
+####################
+last time:1466551182	current time:1466551157	time elapsed:25
+longitude:-71.431183	latitude39.583737
+double squared2240.560304
+TOT_DIFF: 15198.167469	TOT_COUNT:8.000000	CURR_VAR:1899.770934
+####################
+[31d

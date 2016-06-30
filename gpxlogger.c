@@ -324,6 +324,8 @@ int main(int argc, char **argv)
 	flags |= WATCH_DEVICE;
     (void)gps_stream(&gpsdata, flags, source.device);
 
+    int app_id = 1;
+    gps_pass_appid(&gpsdata, app_id, source.device);
     print_gpx_header();
     (void)gps_mainloop(&gpsdata, 5000000, conditionally_log_fix);
     print_gpx_footer();
