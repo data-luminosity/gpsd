@@ -201,28 +201,12 @@ double diff_squared(double lon, double lat){
 }
 
 
-void gps_dump(struct gps_data_t * data, timeval_t* prev_time){
-    //printing out time since last update
+void data_dump(struct gps_data_t * data, timeval_t* prev_time){
     timeval_t cur_time;
     gettimeofday(&cur_time, NULL);
-    printf("last time:%ld\tcurrent time:%ld\ttime elapsed:%ld\n",
-            cur_time.tv_sec, prev_time->tv_sec, timediffval(prev_time, &cur_time));
+    printf("time elapsed:%ld\tlongitude:%f\tlatitude%f\n", timediffval(prev_time, &cur_time), data->fix.longitude, data->fix.latitude);
 
     *prev_time = cur_time;
-    //dumping gps values
-    printf("longitude:%f\tlatitude%f\n",
-            data->fix.longitude,
-            data->fix.latitude
-          );
-    //recomputing the variance
-    tot_diff += diff_squared(data->fix.longitude, data->fix.latitude); 
-    tot_count+=1;
-
-
-    printf("TOT_DIFF: %f\tTOT_COUNT:%f\tCURR_VAR:%f\n",
-            tot_diff, tot_count, tot_diff/tot_count);
-    printf("####################\n");
-
 }
 
 /*
@@ -231,18 +215,23 @@ void gps_dump(struct gps_data_t * data, timeval_t* prev_time){
 
 int main(int argc, char *argv[])
 {
-    int option;
     unsigned int flags = WATCH_ENABLE;
     int wait_clicks = 0;  /* cycles to wait before gpsd timeout */
+
+    int totalIterations;
+    int appid; 
+    //parsing arguments
+    if (argc != 3){
+        printf("ARG1: number of iterations, ARG2: appid\n"); 
+        return -1;
+    }
+    totalIterations= atoi(argv[1]); 
+    appid = atoi(argv[2]); 
+
 
     //getting time
     timeval_t curr_time;
     gettimeofday(&curr_time, NULL);
-    /* Grok the server, port, and device. */
-    if (optind < argc) {
-        gpsd_source_spec(argv[optind], &source);
-    } else
-        gpsd_source_spec(NULL, &source);
 
     /* Open the stream to gpsd. */
     if (gps_open(source.server, source.port, &gpsdata) != 0) {
@@ -252,26 +241,22 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    /* note: we're assuming BSD-style reliable signals here */
-    (void)signal(SIGINT, die);
-    (void)signal(SIGHUP, die);
-    (void)signal(SIGWINCH, resize);
-
     status_timer = time(NULL);
     if (source.device != NULL)
         flags |= WATCH_DEVICE;
     (void)gps_stream(&gpsdata, flags, source.device);
 
-    ////CLIENT PASSSING IN ID///
-    srand(time(NULL));
-    int app_id = rand()%100; //atoi(argv[1]);
-    printf("app id is %d\n", app_id);
-    gps_pass_appid(&gpsdata, app_id, source.device); 
 
     /* heart of the client */
-    for (;;) {
+    int nIteration = 0;
+    
+    //passing in app id
+    gps_sock_pass_appid(&gpsdata,appid,source.device);
+    
+    //printing to a file
+    printf("APP ID: %d\n", appid);
+    while (nIteration <= totalIterations ) {
         int c;
-
         /* wait 1/2 second for gpsd */
         if (!gps_waiting(&gpsdata, 500000)) {
             /* 240 tries at .5 Sec a try is a 2 minute timeout */
@@ -284,10 +269,13 @@ int main(int argc, char *argv[])
             if (gps_read(&gpsdata) == -1) {
                 fprintf(stderr, "cgps: socket error 4\n");
                 die(errno == 0 ? GPS_GONE : GPS_ERROR);
-            } else 
+            } else{ 
                 //dumping out values
-                gps_dump(&gpsdata,&curr_time);
+                data_dump(&gpsdata,&curr_time);
+                nIteration++;
+            }
         }
 
     }
+    die(0);
 }

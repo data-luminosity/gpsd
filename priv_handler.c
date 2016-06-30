@@ -8,8 +8,8 @@
 
 
 long timediffval(timeval_t* start, timeval_t* end){
-    long end_ms = end->tv_sec*1000 + end->tv_usec/1000;
-    long start_ms = start->tv_sec*1000 + start->tv_usec/1000;
+    long end_ms = end->tv_sec*1000 + end->tv_usec/1000.0;
+    long start_ms = start->tv_sec*1000 + start->tv_usec/1000.0;
     return end_ms - start_ms;
 }
 

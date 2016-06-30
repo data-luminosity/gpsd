@@ -14,7 +14,8 @@ Checking for ncurses... (cached) yes
 Checking for libusb-1.0... (cached) yes
 Checking for C library librt... (cached) yes
 Checking for dbus-1... (cached) yes
-Checking for bluez... (cached) yes
+Checking for bluez... (cached) no
+Turning off Bluetooth support, library not found.
 Checking for C type in_port_t... (cached) yes
 Checking whether SUN_LEN is declared... (cached) yes
 Checking for C header file linux/can.h... (cached) yes
@@ -30,103 +31,148 @@ Checking for C function daemon()... (cached) yes
 Checking for C function strlcpy()... (cached) no
 Checking for C function strlcat()... (cached) no
 Checking for C function clock_gettime()... (cached) yes
-Checking for C library libbluetooth... (cached) yes
 Checking for C library libdbus-1... (cached) yes
 Checking for C header file sys/timepps.h... (cached) no
 Checking if sys/ioctl.h supplies TIOCMIWAIT ...(cached) yes
-Checking that xsltproc can make man pages... (cached) yes
-Checking for QtNetwork... (cached) yes
-All configuration flags are defaulted.
+Checking that xsltproc can make man pages... (cached) no
+Neither xsltproc nor xmlto found, documentation cannot be built.
+Checking for QtNetwork... (cached) no
+Altered configuration variables:
+bluez = False (default True): BlueZ support for Bluetooth devices
+qt = False (default True): build QT bindings
+Part of the website build requires asciidoc, not installed.
 scons: done reading SConscript files.
 scons: Building targets ...
-gcc -o priv_handler.o -c -Wmissing-prototypes -Wextra -Wall -Wno-uninitialized -Wno-missing-field-initializers -Wcast-align -Wmissing-declarations -Wstrict-prototypes -Wpointer-arith -Wreturn-type -pthread -Wmissing-declarations -O2 -pthread -I/usr/include/dbus-1.0 -I/usr/lib/dbus-1.0/include -I/usr/include/libusb-1.0 priv_handler.c
 timebase_h(["timebase.h"], ["leapseconds.cache"])
-ar rc libgpsd.a app_entry.o priv_handler.o setting_manager.o bsd_base64.o crc24q.o gpsd_json.o geoid.o isgps.o libgpsd_core.o matrix.o net_dgpsip.o net_gnss_dispatch.o net_ntrip.o ppsthread.o packet.o pseudonmea.o pseudoais.o serial.o subframe.o timebase.o timespec_str.o drivers.o driver_ais.o driver_evermore.o driver_garmin.o driver_garmin_txt.o driver_geostar.o driver_italk.o driver_navcom.o driver_nmea0183.o driver_nmea2000.o driver_oncore.o driver_rtcm2.o driver_rtcm3.o driver_sirf.o driver_superstar2.o driver_tsip.o driver_ubx.o driver_zodiac.o
-ranlib libgpsd.a
-gcc -o gpsd -pthread gpsd.o timehint.o shmexport.o dbusexport.o sd_socket.o -L. -lgpsd -lgps_static -lusb-1.0 -lbluetooth -lm -lrt -ldbus-1
-gcc -o gpsdecode -pthread gpsdecode.o -L. -lgpsd -lgps_static -lusb-1.0 -lbluetooth -lm -lrt -ldbus-1
-gcc -o gpsctl -pthread gpsctl.o -L. -lgpsd -lgps_static -lusb-1.0 -lbluetooth -lm -lrt -ldbus-1
-gcc -o gpsmon -pthread gpsmon.o monitor_italk.o monitor_nmea0183.o monitor_oncore.o monitor_sirf.o monitor_superstar2.o monitor_tnt.o monitor_ubx.o monitor_garmin.o -L. -lgpsd -lgps_static -lusb-1.0 -lbluetooth -lm -lrt -ldbus-1 -lncursesw
+scons: `build' is up to date.
 scons: done building targets.
 ###########SETTING MANAGER###############
-setting manager has 2 applications
-app #: 0	app id:0	type: 0	epoch: 10000	epsilon:100	
-app #: 1	app id:0	type: 0	epoch: 100	epsilon:100	
+setting manager has 100 applications
+app #: 0	app id:0	type: 0	 epoch: 10000	 epsilon:2.000000
+app #: 1	app id:1	type: 0	 epoch: 10100	 epsilon:3.000000
+app #: 2	app id:2	type: 0	 epoch: 10200	 epsilon:4.000000
+app #: 3	app id:3	type: 0	 epoch: 10300	 epsilon:5.000000
+app #: 4	app id:4	type: 0	 epoch: 10400	 epsilon:6.000000
+app #: 5	app id:5	type: 0	 epoch: 10500	 epsilon:7.000000
+app #: 6	app id:6	type: 0	 epoch: 10600	 epsilon:8.000000
+app #: 7	app id:7	type: 0	 epoch: 10700	 epsilon:9.000000
+app #: 8	app id:8	type: 0	 epoch: 10800	 epsilon:10.000000
+app #: 9	app id:9	type: 0	 epoch: 10900	 epsilon:11.000000
+app #: 10	app id:10	type: 0	 epoch: 11000	 epsilon:12.000000
+app #: 11	app id:11	type: 0	 epoch: 11100	 epsilon:13.000000
+app #: 12	app id:12	type: 0	 epoch: 11200	 epsilon:14.000000
+app #: 13	app id:13	type: 0	 epoch: 11300	 epsilon:15.000000
+app #: 14	app id:14	type: 0	 epoch: 11400	 epsilon:16.000000
+app #: 15	app id:15	type: 0	 epoch: 11500	 epsilon:17.000000
+app #: 16	app id:16	type: 0	 epoch: 11600	 epsilon:18.000000
+app #: 17	app id:17	type: 0	 epoch: 11700	 epsilon:19.000000
+app #: 18	app id:18	type: 0	 epoch: 11800	 epsilon:20.000000
+app #: 19	app id:19	type: 0	 epoch: 11900	 epsilon:21.000000
+app #: 20	app id:20	type: 0	 epoch: 12000	 epsilon:22.000000
+app #: 21	app id:21	type: 0	 epoch: 12100	 epsilon:23.000000
+app #: 22	app id:22	type: 0	 epoch: 12200	 epsilon:24.000000
+app #: 23	app id:23	type: 0	 epoch: 12300	 epsilon:25.000000
+app #: 24	app id:24	type: 0	 epoch: 12400	 epsilon:26.000000
+app #: 25	app id:25	type: 0	 epoch: 12500	 epsilon:27.000000
+app #: 26	app id:26	type: 0	 epoch: 12600	 epsilon:28.000000
+app #: 27	app id:27	type: 0	 epoch: 12700	 epsilon:29.000000
+app #: 28	app id:28	type: 0	 epoch: 12800	 epsilon:30.000000
+app #: 29	app id:29	type: 0	 epoch: 12900	 epsilon:31.000000
+app #: 30	app id:30	type: 0	 epoch: 13000	 epsilon:32.000000
+app #: 31	app id:31	type: 0	 epoch: 13100	 epsilon:33.000000
+app #: 32	app id:32	type: 0	 epoch: 13200	 epsilon:34.000000
+app #: 33	app id:33	type: 0	 epoch: 13300	 epsilon:35.000000
+app #: 34	app id:34	type: 0	 epoch: 13400	 epsilon:36.000000
+app #: 35	app id:35	type: 0	 epoch: 13500	 epsilon:37.000000
+app #: 36	app id:36	type: 0	 epoch: 13600	 epsilon:38.000000
+app #: 37	app id:37	type: 0	 epoch: 13700	 epsilon:39.000000
+app #: 38	app id:38	type: 0	 epoch: 13800	 epsilon:40.000000
+app #: 39	app id:39	type: 0	 epoch: 13900	 epsilon:41.000000
+app #: 40	app id:40	type: 0	 epoch: 14000	 epsilon:42.000000
+app #: 41	app id:41	type: 0	 epoch: 14100	 epsilon:43.000000
+app #: 42	app id:42	type: 0	 epoch: 14200	 epsilon:44.000000
+app #: 43	app id:43	type: 0	 epoch: 14300	 epsilon:45.000000
+app #: 44	app id:44	type: 0	 epoch: 14400	 epsilon:46.000000
+app #: 45	app id:45	type: 0	 epoch: 14500	 epsilon:47.000000
+app #: 46	app id:46	type: 0	 epoch: 14600	 epsilon:48.000000
+app #: 47	app id:47	type: 0	 epoch: 14700	 epsilon:49.000000
+app #: 48	app id:48	type: 0	 epoch: 14800	 epsilon:50.000000
+app #: 49	app id:49	type: 0	 epoch: 14900	 epsilon:51.000000
+app #: 50	app id:50	type: 0	 epoch: 15000	 epsilon:52.000000
+app #: 51	app id:51	type: 0	 epoch: 15100	 epsilon:53.000000
+app #: 52	app id:52	type: 0	 epoch: 15200	 epsilon:54.000000
+app #: 53	app id:53	type: 0	 epoch: 15300	 epsilon:55.000000
+app #: 54	app id:54	type: 0	 epoch: 15400	 epsilon:56.000000
+app #: 55	app id:55	type: 0	 epoch: 15500	 epsilon:57.000000
+app #: 56	app id:56	type: 0	 epoch: 15600	 epsilon:58.000000
+app #: 57	app id:57	type: 0	 epoch: 15700	 epsilon:59.000000
+app #: 58	app id:58	type: 0	 epoch: 15800	 epsilon:60.000000
+app #: 59	app id:59	type: 0	 epoch: 15900	 epsilon:61.000000
+app #: 60	app id:60	type: 0	 epoch: 16000	 epsilon:62.000000
+app #: 61	app id:61	type: 0	 epoch: 16100	 epsilon:63.000000
+app #: 62	app id:62	type: 0	 epoch: 16200	 epsilon:64.000000
+app #: 63	app id:63	type: 0	 epoch: 16300	 epsilon:65.000000
+app #: 64	app id:64	type: 0	 epoch: 16400	 epsilon:66.000000
+app #: 65	app id:65	type: 0	 epoch: 16500	 epsilon:67.000000
+app #: 66	app id:66	type: 0	 epoch: 16600	 epsilon:68.000000
+app #: 67	app id:67	type: 0	 epoch: 16700	 epsilon:69.000000
+app #: 68	app id:68	type: 0	 epoch: 16800	 epsilon:70.000000
+app #: 69	app id:69	type: 0	 epoch: 16900	 epsilon:71.000000
+app #: 70	app id:70	type: 0	 epoch: 17000	 epsilon:72.000000
+app #: 71	app id:71	type: 0	 epoch: 17100	 epsilon:73.000000
+app #: 72	app id:72	type: 0	 epoch: 17200	 epsilon:74.000000
+app #: 73	app id:73	type: 0	 epoch: 17300	 epsilon:75.000000
+app #: 74	app id:74	type: 0	 epoch: 17400	 epsilon:76.000000
+app #: 75	app id:75	type: 0	 epoch: 17500	 epsilon:77.000000
+app #: 76	app id:76	type: 0	 epoch: 17600	 epsilon:78.000000
+app #: 77	app id:77	type: 0	 epoch: 17700	 epsilon:79.000000
+app #: 78	app id:78	type: 0	 epoch: 17800	 epsilon:80.000000
+app #: 79	app id:79	type: 0	 epoch: 17900	 epsilon:81.000000
+app #: 80	app id:80	type: 0	 epoch: 18000	 epsilon:82.000000
+app #: 81	app id:81	type: 0	 epoch: 18100	 epsilon:83.000000
+app #: 82	app id:82	type: 0	 epoch: 18200	 epsilon:84.000000
+app #: 83	app id:83	type: 0	 epoch: 18300	 epsilon:85.000000
+app #: 84	app id:84	type: 0	 epoch: 18400	 epsilon:86.000000
+app #: 85	app id:85	type: 0	 epoch: 18500	 epsilon:87.000000
+app #: 86	app id:86	type: 0	 epoch: 18600	 epsilon:88.000000
+app #: 87	app id:87	type: 0	 epoch: 18700	 epsilon:89.000000
+app #: 88	app id:88	type: 0	 epoch: 18800	 epsilon:90.000000
+app #: 89	app id:89	type: 0	 epoch: 18900	 epsilon:91.000000
+app #: 90	app id:90	type: 0	 epoch: 19000	 epsilon:92.000000
+app #: 91	app id:91	type: 0	 epoch: 19100	 epsilon:93.000000
+app #: 92	app id:92	type: 0	 epoch: 19200	 epsilon:94.000000
+app #: 93	app id:93	type: 0	 epoch: 19300	 epsilon:95.000000
+app #: 94	app id:94	type: 0	 epoch: 19400	 epsilon:96.000000
+app #: 95	app id:95	type: 0	 epoch: 19500	 epsilon:97.000000
+app #: 96	app id:96	type: 0	 epoch: 19600	 epsilon:98.000000
+app #: 97	app id:97	type: 0	 epoch: 19700	 epsilon:99.000000
+app #: 98	app id:98	type: 0	 epoch: 19800	 epsilon:100.000000
+app #: 99	app id:99	type: 0	 epoch: 19900	 epsilon:101.000000
 ###########SETTING MANAGER###############
 ####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+###initializing a new conncction###
 ####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
 ####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
-###initializing a new connection with dummy id 0
 ####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
-###APP 0 is enabled!
-###settings manager found entry!
-type: 0	 epoch: 10000	 epsilon:100	####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
-###APP 0 is enabled!
-###settings manager found entry!
-type: 0	 epoch: 10000	 epsilon:100	####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
-###APP 0 is enabled!
-###settings manager found entry!
-type: 0	 epoch: 10000	 epsilon:100	prev time:0	curr time:1460143406
-####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
-###APP 0 is enabled!
-###settings manager found entry!
-type: 0	 epoch: 10000	 epsilon:100	prev time:0	curr time:1460143411
 #####UPDATING TIME SINCE LAST UPDATE####
-past time was : 0	current time was : 1460143411
+past time was : 1467264230	current time was : 1467264231
 #####MODIFYING RETURNED GPS VALUES TO CLIENT####
-actual long:-118.443007	actual lat:34.068888
-modified long:-74.950797	modified lat:60.703972
+ORIGINAL LAT:34.067448	LONG:-118.453500
 ####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
-###APP 0 is enabled!
-###settings manager found entry!
-type: 0	 epoch: 10000	 epsilon:100	prev time:1460143411	curr time:1460143416
-####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
-###APP 0 is enabled!
-###settings manager found entry!
-type: 0	 epoch: 10000	 epsilon:100	prev time:1460143411	curr time:1460143416
-####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
-###APP 0 is enabled!
-###settings manager found entry!
-type: 0	 epoch: 10000	 epsilon:100	prev time:1460143411	curr time:1460143421
-####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
-###APP 0 is enabled!
-###settings manager found entry!
-type: 0	 epoch: 10000	 epsilon:100	prev time:1460143411	curr time:1460143426
 #####UPDATING TIME SINCE LAST UPDATE####
-past time was : 1460143411	current time was : 1460143426
+past time was : 1467264231	current time was : 1467264236
 #####MODIFYING RETURNED GPS VALUES TO CLIENT####
-actual long:-118.443007	actual lat:34.068888
-modified long:-111.891776	modified lat:52.965485
+ORIGINAL LAT:34.067448	LONG:-118.453500
 ####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
-###APP 0 is enabled!
-###settings manager found entry!
-type: 0	 epoch: 10000	 epsilon:100	prev time:1460143426	curr time:1460143426
 ####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
-###APP 0 is enabled!
-###settings manager found entry!
-type: 0	 epoch: 10000	 epsilon:100	prev time:1460143426	curr time:1460143426
-####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
-###APP 0 is enabled!
-###settings manager found entry!
-type: 0	 epoch: 10000	 epsilon:100	prev time:1460143426	curr time:1460143431
-####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
-###APP 0 is enabled!
-###settings manager found entry!
-type: 0	 epoch: 10000	 epsilon:100	prev time:1460143426	curr time:1460143431
-####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
-###APP 0 is enabled!
-###settings manager found entry!
-type: 0	 epoch: 10000	 epsilon:100	prev time:1460143426	curr time:1460143431
-####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
-###APP 0 is enabled!
-###settings manager found entry!
-type: 0	 epoch: 10000	 epsilon:100	prev time:1460143426	curr time:1460143436
 #####UPDATING TIME SINCE LAST UPDATE####
-past time was : 1460143426	current time was : 1460143436
+past time was : 1467264236	current time was : 1467264246
 #####MODIFYING RETURNED GPS VALUES TO CLIENT####
-actual long:-118.443007	actual lat:34.068888
-modified long:-141.136012	modified lat:90.690682
+ORIGINAL LAT:34.067448	LONG:-118.453500
 ####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
-###APP 0 is enabled!
-###settings manager found entry!
-type: 0	 epoch: 10000	 epsilon:100	prev time:1460143436	curr time:1460143436
+#####UPDATING TIME SINCE LAST UPDATE####
+past time was : 1467264246	current time was : 1467264251
+#####MODIFYING RETURNED GPS VALUES TO CLIENT####
+ORIGINAL LAT:34.067448	LONG:-118.453500
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED
+####CHECKING WITH SETTINGS MANAGER TO UPDATE ALL SUBSCRIBERS THAT ARE ENABLED

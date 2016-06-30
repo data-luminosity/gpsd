@@ -1,0 +1,12 @@
+RAW BUFFER DUMP FOR PASS_ID ?APPID={"id":50}APP ID: 50
+time elapsed:0	longitude:nan	latitudenan
+time elapsed:0	longitude:nan	latitudenan
+time elapsed:0	longitude:nan	latitudenan
+time elapsed:12	longitude:-99.214810	latitude41.781167
+time elapsed:15	longitude:-144.964374	latitude64.494566
+time elapsed:15	longitude:-150.005122	latitude22.321127
+time elapsed:10	longitude:-129.193759	latitude27.794618
+time elapsed:10	longitude:-116.420864	latitude17.856743
+time elapsed:15	longitude:-125.636003	latitude69.371646
+time elapsed:10	longitude:-97.426609	latitude68.577316
+time elapsed:10	longitude:-128.685814	latitude18.390054

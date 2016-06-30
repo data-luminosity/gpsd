@@ -1,7 +1,8 @@
 #include <math.h>
+#include "coordinate_calculations.h"
 
 const double KPiDouble = 3.141592654;
-const double KDegreesToRadiansDouble = KPiDouble / 180.0;
+const double KDegreesToRadiansDouble = 3.141592654 / 180.0;
 
 /**
 A constant to convert radians to metres for the Mercator and other projections.

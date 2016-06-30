@@ -26,7 +26,7 @@ int main(){
     sm.n_apps = 100;
     
     //adding a bunch of dummy privacy entry
-    long epo = 10000;
+    long epo = 5000;
     double eps = 2;    
     
     gps_priv_t gps;
@@ -43,7 +43,7 @@ int main(){
     
     setting_manager_dump(&sm);    
     assert(setting_manager_save_gps(&sm, setting_name));
-        
+    /* 
     //loading up a new sm
     setting_manager_t sm2;
     assert(setting_manager_load_gps(&sm2, setting_name));
@@ -58,7 +58,7 @@ int main(){
     //int random_number=(int)(100.0 * rand() / (RAND_MAX + 1.0)) + 1;
     int random_number=(int)(rand() % 100 + 1);
     printf("Random Number=%d\n",random_number);
-
+    */
     /*
     printf("#####TESTING TIME DIFFERENCE\n###");
     timeval_t currtime, prev_time;
